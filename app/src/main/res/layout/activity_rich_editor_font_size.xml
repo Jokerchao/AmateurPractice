@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ll_rich_editor_font_size"
+    android:layout_width="0dp"
+    android:visibility="gone"
+    android:layout_weight="5"
+    android:gravity="center"
+    android:layout_height="match_parent"
+    tools:showIn="@layout/activity_rich_editor_test">
+
+    <View
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="match_parent" />
+
+    <TextView
+        android:id="@+id/tv_rich_editor_fs_small"
+        android:layout_width="41dp"
+        android:layout_height="41dp"
+        android:gravity="center"
+        android:text="小"
+        android:textColor="#FF525252"
+        android:textSize="15dp" />
+
+    <View
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="match_parent" />
+
+    <TextView
+        android:id="@+id/tv_rich_editor_fs_default"
+        android:layout_width="41dp"
+        android:layout_height="41dp"
+        android:gravity="center"
+        android:text="默认"
+        android:textColor="#FF525252"
+        android:background="@drawable/bg_circle_fs_menu"
+        android:textSize="17dp" />
+
+    <View
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="match_parent" />
+
+    <TextView
+        android:id="@+id/tv_rich_editor_fs_large"
+        android:layout_width="41dp"
+        android:layout_height="41dp"
+        android:gravity="center"
+        android:text="大"
+        android:textColor="#FF525252"
+        android:textSize="23dp" />
+
+    <View
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="match_parent" />
+
+</LinearLayout>
+
+        

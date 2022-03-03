@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <WebView
+        android:id="@+id/wv_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+    <EditText
+        android:id="@+id/et_test"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <LinearLayout
+        android:id="@+id/ll_rich_editor"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#FAFAFA"
+        android:gravity="center_vertical"
+        android:visibility="gone"
+        android:orientation="horizontal">
+
+
+        <FrameLayout
+            android:id="@+id/fl_rich_editor_size"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" >
+            <ImageView
+                android:layout_gravity="center"
+                android:id="@+id/iv_rich_editor_size"
+                android:clickable="true"
+                android:layout_width="25dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/selector_rich_editor_font_size"
+                android:focusable="true" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/fl_rich_editor_font_color"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" >
+            <ImageView
+                android:layout_gravity="center"
+                android:id="@+id/iv_rich_editor_font_color"
+                android:layout_width="25dp"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:src="@drawable/selector_rich_editor_font_color"
+                android:focusable="true" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/fl_rich_editor_bold"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" >
+            <ImageView
+                android:layout_gravity="center"
+                android:id="@+id/iv_rich_editor_bold"
+                android:layout_width="25dp"
+                android:clickable="true"
+                android:layout_height="wrap_content"
+                android:src="@drawable/selector_rich_editor_bold"
+                android:focusable="true" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/fl_rich_editor_unordered_list"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" >
+            <ImageView
+                android:id="@+id/iv_rich_editor_unordered_list"
+                android:layout_gravity="center"
+                android:layout_width="25dp"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:src="@drawable/selector_rich_editor_unordered_list"
+                android:focusable="true" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/fl_rich_editor_justify_center"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" >
+            <ImageView
+                android:layout_gravity="center"
+                android:id="@+id/iv_rich_editor_justify_center"
+                android:layout_width="25dp"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:src="@drawable/selector_rich_editor_justify_center"
+                android:focusable="true" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/fl_rich_editor_blockquote"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" >
+            <ImageView
+                android:layout_gravity="center"
+                android:id="@+id/iv_rich_editor_blockquote"
+                android:layout_width="25dp"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:src="@drawable/selector_rich_editor_blockquote"
+                android:focusable="true" />
+        </FrameLayout>
+
+        <include layout="@layout/activity_rich_editor_font_size" />
+
+        <include layout="@layout/activity_rich_editor_font_color" />
+
+
+    </LinearLayout>
+
+</LinearLayout>

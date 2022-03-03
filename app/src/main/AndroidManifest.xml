@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.kraos.querycalendar">
+
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
+    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".activity.TagLayoutActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.MaterialEditTextActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.CameraViewActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.ImageTextActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.PieChartActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.DashBoardActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.TestCustomViewActivity"
+            android:exported="false" />
+        <activity android:name=".activity.KotlinTestActivity" />
+        <activity android:name=".activity.IllegalStateTestActivity" />
+        <activity android:name=".activity.CoroutinesTestActivity" />
+        <activity android:name=".activity.DatePickerTestActivity" />
+        <activity android:name=".activity.RichEditorTestActivity" />
+        <activity android:name=".activity.ScheduleTestActivity" />
+        <activity android:name=".activity.DragViewTestActivity" />
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".activity.TestSelectActivity" />
+    </application>
+
+</manifest>
