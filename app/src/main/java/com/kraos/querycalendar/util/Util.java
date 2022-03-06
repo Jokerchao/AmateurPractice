@@ -10,11 +10,11 @@ public class Util {
     public static Bitmap getAvatar(Resources res, int width) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
-        BitmapFactory.decodeResource(res, R.drawable.avatar_rengwuxian, options);
+        BitmapFactory.decodeResource(res, R.drawable.test, options);
         options.inJustDecodeBounds = false;
         options.inDensity = options.outWidth;
         options.inTargetDensity = width;
-        return BitmapFactory.decodeResource(res, R.drawable.avatar_rengwuxian, options);
+        return BitmapFactory.decodeResource(res, R.drawable.test, options);
     }
 
     public static float getZForCamera() {

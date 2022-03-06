@@ -26,6 +26,7 @@ import com.kraos.querycalendar.activity.KotlinTestActivity;
 import com.kraos.querycalendar.activity.MaterialEditTextActivity;
 import com.kraos.querycalendar.activity.PieChartActivity;
 import com.kraos.querycalendar.activity.RichEditorTestActivity;
+import com.kraos.querycalendar.activity.ScalableImageViewActivity;
 import com.kraos.querycalendar.activity.ScheduleTestActivity;
 import com.kraos.querycalendar.activity.TagLayoutActivity;
 import com.kraos.querycalendar.activity.TestCustomViewActivity;
@@ -55,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
         add("自定义CameraView");
         add("MaterialEditText练习");
         add("TagLayout练习");
+        add("ScalableImageView练习");
     }};
 
     @Override
@@ -143,6 +145,9 @@ public class MainActivity extends AppCompatActivity {
                             break;
                         case 14:
                             new TagLayoutActivity().bootActivity(MainActivity.this);
+                            break;
+                        case 15:
+                            new ScalableImageViewActivity().bootActivity(MainActivity.this);
                             break;
                     }
                 }
