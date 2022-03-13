@@ -1,5 +1,6 @@
 package com.kraos.querycalendar.view;
 
+import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -44,7 +45,7 @@ public class ScalableImageView extends View implements GestureDetector.OnGesture
     private float originalOffsetY;
     private float currentScale;
 
-    private OverScroller overScroller;
+    private final OverScroller overScroller;
 
     public ScalableImageView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -128,7 +129,7 @@ public class ScalableImageView extends View implements GestureDetector.OnGesture
 
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-        if(isBig){
+        if (isBig) {
             overScroller.fling((int) offsetX, (int) offsetY, (int) velocityX, (int) velocityY,
                     (int) -(bigScale * bitmapWidth / 2 - midX),
                     (int) (bigScale * bitmapWidth / 2 - midX),
@@ -148,6 +149,8 @@ public class ScalableImageView extends View implements GestureDetector.OnGesture
     public boolean onDoubleTap(MotionEvent e) {
         isBig = !isBig;
         if (isBig) {
+            offsetX = (e.getX()-midX) - (e.getX() - midX) * bigScale / smallScale;
+            offsetY = (e.getY()-midY) - (e.getY() - midY) * bigScale / smallScale;
             getAnimator().start();
         } else {
             getAnimator().reverse();
@@ -165,6 +168,30 @@ public class ScalableImageView extends View implements GestureDetector.OnGesture
         if (objectAnimator == null) {
             objectAnimator = ObjectAnimator.ofFloat(this, "currentScale", 0);
             objectAnimator.setFloatValues(smallScale, bigScale);
+            objectAnimator.addListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    if(!isBig){
+                        offsetX = 0;
+                        offsetY = 0;
+                    }
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+
+                }
+            });
         }
         return objectAnimator;
     }
@@ -189,7 +216,7 @@ public class ScalableImageView extends View implements GestureDetector.OnGesture
 
     @Override
     public void run() {
-        if(overScroller.computeScrollOffset()){
+        if (overScroller.computeScrollOffset()) {
             offsetX = overScroller.getCurrX();
             offsetY = overScroller.getCurrY();
             invalidate();

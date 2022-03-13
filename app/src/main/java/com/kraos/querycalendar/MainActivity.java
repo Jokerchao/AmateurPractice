@@ -30,6 +30,7 @@ import com.kraos.querycalendar.activity.ScalableImageViewActivity;
 import com.kraos.querycalendar.activity.ScheduleTestActivity;
 import com.kraos.querycalendar.activity.TagLayoutActivity;
 import com.kraos.querycalendar.activity.TestCustomViewActivity;
+import com.kraos.querycalendar.activity.TestProxyActivity;
 import com.kraos.querycalendar.activity.TestSelectActivity;
 import com.kraos.querycalendar.view.MaterialEditText;
 
@@ -57,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
         add("MaterialEditText练习");
         add("TagLayout练习");
         add("ScalableImageView练习");
+        add("动态代理练习");
     }};
 
     @Override
@@ -148,6 +150,9 @@ public class MainActivity extends AppCompatActivity {
                             break;
                         case 15:
                             new ScalableImageViewActivity().bootActivity(MainActivity.this);
+                            break;
+                        case 16:
+                            new TestProxyActivity().bootActivity(MainActivity.this);
                             break;
                     }
                 }
