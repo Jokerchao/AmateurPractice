@@ -11,6 +11,7 @@ public class DragView extends AppCompatButton {
     private float moveX;
     private float moveY;
 
+
     public DragView(Context context) {
         super(context);
     }
@@ -24,18 +25,31 @@ public class DragView extends AppCompatButton {
     }
 
     @Override
+    public boolean performClick() {
+        return super.performClick();
+    }
+
+
+    @Override
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                moveX = event.getX();
-                moveY = event.getY();
+                performClick();
+
+                //得到父视图的right/bottom
+                moveX = getX() - event.getRawX();
+                moveY = getY() - event.getRawY();
                 break;
             case MotionEvent.ACTION_MOVE:
-                setTranslationX(getX() + (event.getX() - moveX));
-                setTranslationY(getY() + (event.getY() - moveY));
+//                setTranslationX(getX() + (event.getX() - moveX));
+//                setTranslationY(getY() + (event.getY() - moveY));
+                animate()
+                        .x(event.getRawX() + moveX)
+                        .y(event.getRawY() + moveY)
+                        .setDuration(0)
+                        .start();
                 break;
             case MotionEvent.ACTION_UP:
-                break;
             case MotionEvent.ACTION_CANCEL:
                 break;
         }

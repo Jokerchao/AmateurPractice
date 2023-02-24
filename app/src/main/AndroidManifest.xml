@@ -47,6 +47,7 @@
         <activity android:name=".activity.RichEditorTestActivity" />
         <activity android:name=".activity.ScheduleTestActivity" />
         <activity android:name=".activity.DragViewTestActivity" />
+        <activity android:name=".activity.TestDragViewActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
