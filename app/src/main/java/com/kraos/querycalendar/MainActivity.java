@@ -29,6 +29,7 @@ import com.kraos.querycalendar.activity.RichEditorTestActivity;
 import com.kraos.querycalendar.activity.ScalableImageViewActivity;
 import com.kraos.querycalendar.activity.ScheduleTestActivity;
 import com.kraos.querycalendar.activity.TagLayoutActivity;
+import com.kraos.querycalendar.activity.TestAnimateActivity;
 import com.kraos.querycalendar.activity.TestCustomViewActivity;
 import com.kraos.querycalendar.activity.TestDragViewActivity;
 import com.kraos.querycalendar.activity.TestProxyActivity;
@@ -61,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
         add("ScalableImageView练习");
         add("动态代理练习");
         add("限制范围的拖动View练习");
+        add("组合动画练习");
     }};
 
     @Override
@@ -158,6 +160,9 @@ public class MainActivity extends AppCompatActivity {
                             break;
                         case 17:
                             new TestDragViewActivity().bootActivity(MainActivity.this);
+                            break;
+                        case 18:
+                            new TestAnimateActivity().bootActivity(MainActivity.this);
                             break;
                     }
                 }

@@ -40,6 +40,9 @@
         <activity
             android:name=".activity.TestCustomViewActivity"
             android:exported="false" />
+        <activity
+            android:name=".activity.TestAnimateActivity"
+            android:exported="false" />
         <activity android:name=".activity.KotlinTestActivity" />
         <activity android:name=".activity.IllegalStateTestActivity" />
         <activity android:name=".activity.CoroutinesTestActivity" />
