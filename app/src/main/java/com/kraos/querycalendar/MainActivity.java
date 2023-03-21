@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.kraos.querycalendar.activity.CameraViewActivity;
+import com.kraos.querycalendar.activity.ComposeTestActivity;
 import com.kraos.querycalendar.activity.CoroutinesTestActivity;
 import com.kraos.querycalendar.activity.DashBoardActivity;
 import com.kraos.querycalendar.activity.DatePickerTestActivity;
@@ -63,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
         add("动态代理练习");
         add("限制范围的拖动View练习");
         add("组合动画练习");
+        add("Compose练习");
     }};
 
     @Override
@@ -164,6 +166,10 @@ public class MainActivity extends AppCompatActivity {
                         case 18:
                             new TestAnimateActivity().bootActivity(MainActivity.this);
                             break;
+                        case 19:
+                            new ComposeTestActivity().bootActivity(MainActivity.this);
+                            break;
+
                     }
                 }
             });
