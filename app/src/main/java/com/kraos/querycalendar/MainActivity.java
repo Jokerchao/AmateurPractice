@@ -1,5 +1,6 @@
 package com.kraos.querycalendar;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.NotificationManager;
 import android.os.Bundle;
@@ -35,7 +36,6 @@ import com.kraos.querycalendar.activity.TestCustomViewActivity;
 import com.kraos.querycalendar.activity.TestDragViewActivity;
 import com.kraos.querycalendar.activity.TestProxyActivity;
 import com.kraos.querycalendar.activity.TestSelectActivity;
-import com.kraos.querycalendar.view.MaterialEditText;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
+        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, @SuppressLint("RecyclerView") final int position) {
             MyViewHolder viewHolder = (MyViewHolder) holder;
             String string = (String) mList.get(position);
             viewHolder.tv.setText(string);
