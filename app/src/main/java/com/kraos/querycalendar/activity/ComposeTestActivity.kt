@@ -2,8 +2,12 @@ package com.kraos.querycalendar.activity
 
 import android.os.Bundle
 import androidx.activity.compose.setContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,29 +17,42 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
 import com.kraos.querycalendar.R
 import com.kraos.querycalendar.view.advancedShadow
 
 class ComposeTestActivity : BaseActivity() {
+    @OptIn(ExperimentalPagerApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             val testList = listOf("主播榜", "作品榜", "榮譽榜", "其它榜單")
-            TestRank(testList)
+            HorizontalPager(count = 3) { page ->
+                TestRank(testList)
+            }
         }
     }
 }
@@ -102,21 +119,9 @@ private fun RankItem(it: String) {
             .clip(RoundedCornerShape(15.dp))
             .background(Color.White),
         horizontalAlignment = Alignment.CenterHorizontally,
-
-        ) {
-        Text(text = it, color = Color(0xff050505))
-        Text(text = it, color = Color(0xff050505))
-        Text(text = it, color = Color(0xff050505))
-        Text(text = it, color = Color(0xff050505))
-        Text(text = it, color = Color(0xff050505))
-        Text(text = it, color = Color(0xff050505))
-        Text(text = it, color = Color(0xff050505))
-        Text(text = it, color = Color(0xff050505))
-        Text(text = it, color = Color(0xff050505))
-        Text(text = it, color = Color(0xff050505))
-        Text(text = it, color = Color(0xff050505))
-        Text(text = it, color = Color(0xff050505))
-        Text(text = it, color = Color(0xff050505))
+    ) {
+        Text(it)
+        FoldList()
     }
 }
 
@@ -191,6 +196,94 @@ private fun TopSingleRank() {
         }
         Text(text = "作品榜", fontSize = 10.sp)
     }
+}
+
+@Composable
+@Preview(showBackground = true)
+fun FoldList() {
+    var open by remember { mutableStateOf(false) }
+    val degree by animateFloatAsState(targetValue = if (open) 180f else 0f)
+    Column(
+        Modifier.fillMaxSize(),
+    ) {
+        Row(modifier = Modifier
+            .padding(top = 10.dp, bottom = 5.dp, start = 10.dp, end = 10.dp)
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(12.dp))
+            .border(0.5.dp, Color(0x1AFF485C), RoundedCornerShape(12.dp))
+            .background(
+                brush = Brush.linearGradient(
+                    colors = listOf(
+                        Color(0xFFFF485C).copy(alpha = 0.1f),
+                        Color(0xFFFF485C).copy(alpha = 0.03f)
+//                    remember { Color(0xFFFF485C).copy(alpha = 0.1f) },
+//                    remember { Color(0xFFFF485C).copy(alpha = 0.03f) }
+                    ),
+                    start = Offset(0f, 36.dp.value),
+                    end = Offset(335.dp.value, 40.dp.value)
+                )
+            )
+            .padding(10.dp)
+            .clickable { open = !open }
+        ) {
+            Column(
+                modifier = Modifier
+//                    .weight(1f)
+                    .width(300.dp)
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text("《桥边姑娘》")
+                    Text("NO.1", color = Color(0xFFFF485C))
+                }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text("2023-03-0")
+                    Text("歡歌live榜", color = Color(0xFFFF485C))
+                }
+            }
+
+            Box {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_launcher_foreground),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(50.dp)
+                        .rotate(degree),
+                    contentScale = ContentScale.Fit
+                )
+            }
+        }
+
+        AnimatedVisibility(visible = open) {
+            Column {
+                (0..10).forEach { _ ->
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(15.dp)
+                    ) {
+                        Row(
+                            modifier = Modifier.weight(1f),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Text("2023-02-09")
+                            Text("片段榜")
+                        }
+                        Text("NO.3", color = Color(0xFFFF485C))
+                    }
+                }
+            }
+        }
+
+    }
+
 }
 
 
