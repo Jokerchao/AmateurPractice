@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.sp
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.kraos.querycalendar.R
+import com.kraos.querycalendar.view.TestLearn
 import com.kraos.querycalendar.view.advancedShadow
 
 class ComposeTestActivity : BaseActivity() {
@@ -50,26 +51,13 @@ class ComposeTestActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val testList = listOf("主播榜", "作品榜", "榮譽榜", "其它榜單")
-            HorizontalPager(count = 3) { page ->
-                TestRank(testList)
+            HorizontalPager(count = 2) { page ->
+                when (page) {
+                    0 -> TestRank(testList)
+                    1 -> TestLearn("明日方舟")
+                }
             }
         }
-    }
-}
-
-@Composable
-private fun Test(name: String = "Hello World!") {
-    Column(Modifier.background(Color.Gray)) {
-//        val textWord = remember { mutableStateOf("Hello World!") }
-        val textWord = remember(name) {
-            if (name.length > 5) {
-                "long test"
-            } else {
-                "short test"
-            }
-        }
-        Text(textWord)
-        Image(painter = painterResource(id = R.drawable.test), contentDescription = "image")
     }
 }
 
@@ -214,10 +202,8 @@ fun FoldList() {
             .background(
                 brush = Brush.linearGradient(
                     colors = listOf(
-                        Color(0xFFFF485C).copy(alpha = 0.1f),
-                        Color(0xFFFF485C).copy(alpha = 0.03f)
-//                    remember { Color(0xFFFF485C).copy(alpha = 0.1f) },
-//                    remember { Color(0xFFFF485C).copy(alpha = 0.03f) }
+                        remember { Color(0xFFFF485C).copy(alpha = 0.1f) },
+                        remember { Color(0xFFFF485C).copy(alpha = 0.03f) }
                     ),
                     start = Offset(0f, 36.dp.value),
                     end = Offset(335.dp.value, 40.dp.value)
