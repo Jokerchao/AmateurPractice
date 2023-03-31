@@ -36,6 +36,7 @@ import com.kraos.querycalendar.activity.TestCustomViewActivity;
 import com.kraos.querycalendar.activity.TestDragViewActivity;
 import com.kraos.querycalendar.activity.TestProxyActivity;
 import com.kraos.querycalendar.activity.TestSelectActivity;
+import com.kraos.querycalendar.activity.TestTextColorFormatActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
         add("限制范围的拖动View练习");
         add("组合动画练习");
         add("Compose练习");
+        add("文本分色练习");
     }};
 
     @Override
@@ -169,6 +171,10 @@ public class MainActivity extends AppCompatActivity {
                         case 19:
                             new ComposeTestActivity().bootActivity(MainActivity.this);
                             break;
+                        case 20:
+                            new TestTextColorFormatActivity().bootActivity(MainActivity.this);
+                            break;
+
 
                     }
                 }
