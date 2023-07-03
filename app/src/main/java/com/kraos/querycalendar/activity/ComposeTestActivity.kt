@@ -3,7 +3,16 @@ package com.kraos.querycalendar.activity
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.VectorConverter
+import androidx.compose.animation.core.animateDp
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.keyframes
+import androidx.compose.animation.core.updateTransition
+import androidx.compose.animation.rememberSplineBasedDecay
+import androidx.compose.animation.scaleIn
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -21,8 +30,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,6 +48,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -44,6 +56,7 @@ import com.google.accompanist.pager.HorizontalPager
 import com.kraos.querycalendar.R
 import com.kraos.querycalendar.view.TestLearn
 import com.kraos.querycalendar.view.advancedShadow
+import kotlinx.coroutines.delay
 
 class ComposeTestActivity : BaseActivity() {
     @OptIn(ExperimentalPagerApi::class)
@@ -51,14 +64,113 @@ class ComposeTestActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val testList = listOf("主播榜", "作品榜", "榮譽榜", "其它榜單")
-            HorizontalPager(count = 2) { page ->
+            HorizontalPager(count = 4) { page ->
                 when (page) {
                     0 -> TestRank(testList)
                     1 -> TestLearn("明日方舟")
+                    2 -> TestAnimation()
+                    3 -> TestAnimatedVisibility()
                 }
             }
         }
     }
+}
+
+@OptIn(ExperimentalAnimationApi::class)
+@Composable
+@Preview
+fun TestAnimatedVisibility(){
+    Column {
+        var shown by remember { mutableStateOf(true) }
+        AnimatedVisibility(visible = shown, enter = scaleIn()) {
+            TestTransition()
+        }
+        Button(onClick = { shown = !shown }) {
+            Text(text = "切换",fontSize = 20.sp)
+        }
+    }
+}
+
+@Composable
+@Preview
+fun TestTransition(){
+    var big by remember { mutableStateOf(false) }
+    val bigTransition = updateTransition(targetState = big, label = "bigTransition")
+    val size by bigTransition.animateDp(label = "size") {
+        if (it) 96.dp else 48.dp
+    }
+    val corner by bigTransition.animateDp(label = "corner") {
+        if (it) 0.dp else 18.dp
+    }
+
+    var shown by remember { mutableStateOf(true) }
+
+    Column {
+        AnimatedVisibility(visible = shown) {
+            Box(
+                modifier = Modifier
+                    .size(size)
+                    .clip(RoundedCornerShape(corner))
+                    .background(Color.Blue)
+                    .clickable {
+                        big = !big
+                    }
+            )
+        }
+
+        Button(onClick = { shown = !shown }) {
+            Text(text = "切换",fontSize = 20.sp)
+        }
+
+    }
+
+
+}
+
+@Composable
+@Preview
+fun TestAnimation() {
+    var big by remember { mutableStateOf(false) }
+    val size by animateDpAsState(targetValue = if (big) 96.dp else 48.dp, label = "size")
+    val anim = remember { Animatable(size, Dp.VectorConverter) }
+    val decayAnim = remember { Animatable(0.dp, Dp.VectorConverter) }
+    val decay = rememberSplineBasedDecay<Dp>()
+
+    LaunchedEffect(big) {
+        anim.animateTo(
+            size,
+            keyframes {
+                144.dp at 400
+                durationMillis = 1000
+            }
+        )
+    }
+
+    LaunchedEffect(Unit){
+        delay(1000)
+        decayAnim.animateDecay(1000.dp,decay)
+    }
+
+
+    Column() {
+        Box(Modifier.size(200.dp), contentAlignment = Alignment.Center) {
+            Box(
+                modifier = Modifier
+                    .size(anim.value)
+                    .background(Color.Green)
+                    .clickable {
+                        big = !big
+                    }
+            )
+        }
+        Box(
+            modifier = Modifier
+                .padding(0.dp, decayAnim.value, 0.dp, 0.dp)
+                .size(100.dp)
+                .background(Color.Red)
+        )
+    }
+
 }
 
 
