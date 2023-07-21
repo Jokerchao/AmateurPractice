@@ -45,7 +45,10 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.AlignmentLine
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.MeasureResult
+import androidx.compose.ui.layout.layout
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -64,18 +67,48 @@ class ComposeTestActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val testList = listOf("主播榜", "作品榜", "榮譽榜", "其它榜單")
-            HorizontalPager(count = 4) { page ->
+            HorizontalPager(count = 5) { page ->
                 when (page) {
                     0 -> TestRank(testList)
                     1 -> TestLearn("明日方舟")
                     2 -> TestAnimation()
                     3 -> TestAnimatedVisibility()
+                    4 -> TestCustomModifier()
                 }
             }
         }
     }
 }
 
+/**
+ * 自定义Modifier的Layout练习
+ */
+@Composable
+@Preview
+fun TestCustomModifier() {
+    Column(Modifier.background(Color.Blue)) {
+        //有点类似于自定义Layout的方式,只是改吧Layout布局的方式,不影响内部元素
+        Text(text = "Kraos", Modifier.layout { measurable, constraints ->
+            val paddingX = 10.dp.roundToPx()
+            val paddingY = 5.dp.roundToPx()
+            //测量内部元素尺寸
+            val placeable = measurable.measure(constraints.copy(
+                maxWidth = constraints.maxWidth - paddingX * 2,
+                maxHeight = constraints.maxHeight - paddingY * 2
+            ))
+
+            //给定自身尺寸
+            layout(placeable.width + paddingX * 2, placeable.height + paddingY * 2) {
+                placeable.placeRelative(paddingX, paddingY)
+            }
+        })
+        Text(text = "Kraos", Modifier.padding(10.dp).padding(10.dp).background(Color.Red))
+    }
+}
+
+/**
+ * AnimatedVisibility练习
+ */
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 @Preview

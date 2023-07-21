@@ -30,6 +30,9 @@ import com.kraos.querycalendar.activity.PieChartActivity;
 import com.kraos.querycalendar.activity.RichEditorTestActivity;
 import com.kraos.querycalendar.activity.ScalableImageViewActivity;
 import com.kraos.querycalendar.activity.ScheduleTestActivity;
+import com.kraos.querycalendar.activity.SwipeStackCardActivity;
+import com.kraos.querycalendar.activity.SwipeStackCardActivityKt;
+import com.kraos.querycalendar.activity.SwipeStrangerCardActivity;
 import com.kraos.querycalendar.activity.TagLayoutActivity;
 import com.kraos.querycalendar.activity.TestAnimateActivity;
 import com.kraos.querycalendar.activity.TestCustomViewActivity;
@@ -67,6 +70,8 @@ public class MainActivity extends AppCompatActivity {
         add("组合动画练习");
         add("Compose练习");
         add("文本分色练习");
+        add("仿探探卡片滑动交互");
+        add("陌生人社交练习");
     }};
 
     @Override
@@ -173,6 +178,12 @@ public class MainActivity extends AppCompatActivity {
                             break;
                         case 20:
                             new TestTextColorFormatActivity().bootActivity(MainActivity.this);
+                            break;
+                        case 21:
+                            new SwipeStackCardActivity().bootActivity(MainActivity.this);
+                            break;
+                        case 22:
+                            new SwipeStrangerCardActivity().bootActivity(MainActivity.this);
                             break;
 
 

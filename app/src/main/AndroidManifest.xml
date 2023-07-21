@@ -20,6 +20,10 @@
         <activity
             android:name=".activity.ComposeTestActivity"
             android:exported="false" />
+        <activity android:name=".activity.SwipeStackCardActivity"
+            android:exported="false"/>
+        <activity android:name=".activity.SwipeStrangerCardActivity"
+            android:exported="false"/>
         <activity
             android:name=".activity.TestProxyActivity"
             android:exported="false" />
