@@ -22,15 +22,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Stable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.rememberUpdatedState
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -63,7 +55,7 @@ import kotlin.math.roundToInt
 class SwipeStrangerCardActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val drawables = listOf(
+        val drawables = mutableListOf(
             R.drawable.ic_test_1,
             R.drawable.ic_test_2,
             R.drawable.ic_test_3,
@@ -77,7 +69,7 @@ class SwipeStrangerCardActivity : BaseActivity() {
                     .background(color = Color.Gray),
                 contentAlignment = Alignment.Center
             ) {
-                PreStrangerCardStack()
+                StrangerCardStackList(drawables)
             }
         }
     }
@@ -429,7 +421,6 @@ class AnimatedSwipeStrangerCard(
             }
             launch { rotation.animateTo(newRotationValue, spec) }
             launch { offsetX.animateTo(newOffsetX, tween(1000)) }
-            isRemove = true
         }
     }
 
@@ -454,19 +445,23 @@ fun SwipeStrangerCard(
 fun StrangerCardStack(
     list: List<AnimatedSwipeStrangerCard>,
     cardCount: Int = 5,
-    onRemove: (AnimatedSwipeStrangerCard) -> Unit = {},
+    onRemove: (Int) -> Unit = {},
     paddingBetweenCards: Dp = defaultPaddingBetweenItems,
     sizeBetweenCards: Dp = defaultSizeBetweenItems,
+    coroutineScope: CoroutineScope
 ) {
 
-    val coroutineScope = rememberCoroutineScope()
+//    val coroutineScope = rememberCoroutineScope()
 
     val selectedIndexState by remember {
         mutableStateOf(0)
     }
 
+
+
+
     Box(contentAlignment = Alignment.BottomCenter) {
-        list.forEach { anim ->
+        list.forEachIndexed { index, anim ->
             SwipeStrangerCard(modifier = Modifier
                 .padding(top = anim.paddingTopDp)
                 .zIndex(-anim.paddingTopDp.value)
@@ -477,9 +472,7 @@ fun StrangerCardStack(
                         onDragEnd = {
                             coroutineScope.launch {
                                 anim.startDragEndAnim()
-                                if (anim.isRemove) {
-//                                    onRemove.invoke(anim)
-                                }
+                                onRemove.invoke(index)
                             }
                         },
                         onDragCancel = {
@@ -495,6 +488,9 @@ fun StrangerCardStack(
                         }
                     )
                 }
+//                .clickable {
+//                    onRemove.invoke(index)
+//                }
                 .size(anim.widthDp, anim.heightDp)
             ) {
                 Image(
@@ -511,32 +507,51 @@ fun StrangerCardStack(
 }
 
 @Composable
-@Preview(showBackground = true, backgroundColor = 0xFF000000)
-private fun PreStrangerCardStack() {
-    val drawables = mutableListOf(
-        R.drawable.ic_test_1,
-        R.drawable.ic_test_2,
-        R.drawable.ic_test_3,
-        R.drawable.ic_test_4,
-        R.drawable.ic_test_5,
+fun StrangerCardStackList(beans: MutableList<Int>) {
+
+    val animatedSwipeStrangerCardList = remember { mutableStateListOf<AnimatedSwipeStrangerCard>() }
+
+
+    val stateResultList by remember {
+        derivedStateOf {
+            beans.forEach {
+                animatedSwipeStrangerCardList.add(
+                    AnimatedSwipeStrangerCard(
+                        bean = it,
+                        initWidth = 355.dp,
+                        initHeight = 611.dp
+                    )
+                )
+            }
+            animatedSwipeStrangerCardList
+        }
+    }
+
+    val coroutineScope = rememberCoroutineScope()
+
+    StrangerCardStack(
+        list = stateResultList,
+        cardCount = stateResultList.size,
+        onRemove = {
+            beans.removeAt(it)
+        },
+        coroutineScope = coroutineScope
     )
 
-    val animatedSwipeStrangerCardList = remember {
-        mutableStateListOf<AnimatedSwipeStrangerCard>()
-    }
-    drawables.forEach {
-        animatedSwipeStrangerCardList.add(
-            AnimatedSwipeStrangerCard(
-                bean = it,
-                initWidth = 355.dp,
-                initHeight = 611.dp
-            )
+}
+
+@Composable
+@Preview(showBackground = true)
+private fun PreStrangerCardStackList() {
+    val drawables = remember{
+        mutableListOf(
+            R.drawable.ic_test_1,
+            R.drawable.ic_test_2,
+            R.drawable.ic_test_3,
+            R.drawable.ic_test_4,
+            R.drawable.ic_test_5,
         )
     }
-    StrangerCardStack(
-        list = animatedSwipeStrangerCardList,
-        cardCount = animatedSwipeStrangerCardList.size,
-        onRemove = {
-            animatedSwipeStrangerCardList.remove(it)
-        })
+
+    StrangerCardStackList(drawables)
 }
