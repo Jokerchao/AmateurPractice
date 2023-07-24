@@ -42,6 +42,7 @@ import com.kraos.querycalendar.VerticalAlignment
 import com.kraos.querycalendar.VerticalAnimationStyle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import kotlin.math.abs
@@ -107,7 +108,7 @@ fun PreviewSwipeStranger() {
 private const val rotationValue = 45f
 private const val defaultAnimationDuration = 300
 private val defaultPaddingBetweenItems = 6.dp
-private val defaultSizeBetweenItems = 20.dp
+private val defaultSizeBetweenItems = 20.0.dp
 
 @Composable
 fun SwipeStranger(
@@ -342,11 +343,11 @@ private suspend fun animateOnClick(
 class AnimatedSwipeStrangerCard(
     val bean: Int,
     //每张卡片的顶部偏移
-    private val initPadding: Dp = 0.dp,
+    initPadding: Dp = 0.dp,
     //卡片的宽度
-    private val initWidth: Dp = 0.dp,
+    initWidth: Dp = 0.dp,
     //卡片的高度
-    private val initHeight: Dp = 0.dp,
+    initHeight: Dp = 0.dp,
     // 偏移最大值
     private val maxOffset: Dp = 100.dp,
     private val duration: Int = 300
@@ -354,7 +355,7 @@ class AnimatedSwipeStrangerCard(
     private val offsetX = Animatable(0.dp, Dp.VectorConverter)
     val offsetXDp: Dp get() = offsetX.value
     private val offsetY = Animatable(0.dp, Dp.VectorConverter)
-    val offsetYPx: Dp get() = offsetY.value
+    val offsetYDp: Dp get() = offsetY.value
     private val rotation = Animatable(0f)
     val rotationValue: Float get() = rotation.value
 
@@ -374,9 +375,11 @@ class AnimatedSwipeStrangerCard(
      */
     suspend fun startDragAnim(dragOffsetX: Dp, dragOffsetY: Dp) {
         coroutineScope {
-            launch { offsetX.snapTo(offsetXDp + dragOffsetX) }
-            launch { offsetY.snapTo(offsetYPx + dragOffsetY) }
-            launch { rotation.snapTo((dragOffsetX.value / 50) + rotationValue) }
+            joinAll(
+                launch { offsetX.snapTo(offsetXDp + dragOffsetX) },
+                launch { offsetY.snapTo(offsetYDp + dragOffsetY) },
+                launch { rotation.snapTo((dragOffsetX.value / 50) + rotationValue) }
+            )
         }
     }
 
@@ -397,9 +400,10 @@ class AnimatedSwipeStrangerCard(
     private suspend fun resetOffsetAnim() {
         coroutineScope {
             val spec: TweenSpec<Float> = tween(duration)
-            launch { rotation.animateTo(0f, spec) }
-            launch { offsetX.animateTo(0.dp) }
-            launch { offsetY.animateTo(0.dp) }
+            joinAll(
+                launch { rotation.animateTo(0f, spec) },
+                launch { offsetX.animateTo(0.dp) },
+                launch { offsetY.animateTo(0.dp) })
         }
     }
 
@@ -408,7 +412,7 @@ class AnimatedSwipeStrangerCard(
      */
     private suspend fun startRemoveAnim() {
         coroutineScope {
-            val spec: TweenSpec<Float> = tween(600)
+            val spec: TweenSpec<Float> = tween(300)
             val newRotationValue = if (rotationValue > 0) {
                 rotationValue + 20
             } else {
@@ -419,8 +423,11 @@ class AnimatedSwipeStrangerCard(
             } else {
                 offsetXDp - (widthDp.times(1.5f))
             }
-            launch { rotation.animateTo(newRotationValue, spec) }
-            launch { offsetX.animateTo(newOffsetX, tween(1000)) }
+            joinAll(
+                launch { rotation.animateTo(newRotationValue, spec) },
+                launch { offsetX.animateTo(newOffsetX, tween(300)) }
+            )
+            isRemove = true
         }
     }
 
@@ -445,61 +452,128 @@ fun SwipeStrangerCard(
 fun StrangerCardStack(
     list: List<AnimatedSwipeStrangerCard>,
     cardCount: Int = 5,
-    onRemove: (Int) -> Unit = {},
+    onRemove: (AnimatedSwipeStrangerCard) -> Unit = {},
     paddingBetweenCards: Dp = defaultPaddingBetweenItems,
     sizeBetweenCards: Dp = defaultSizeBetweenItems,
-    coroutineScope: CoroutineScope
+    initWidth: Dp,
+    initHeight: Dp
 ) {
 
-//    val coroutineScope = rememberCoroutineScope()
+    val coroutineScope = rememberCoroutineScope()
 
-    val selectedIndexState by remember {
-        mutableStateOf(0)
+    var firstCardOffsetX by remember {
+        mutableStateOf(0.dp)
+    }
+
+    var firstCardOffsetY by remember {
+        mutableStateOf(0.dp)
     }
 
 
-
-
     Box(contentAlignment = Alignment.BottomCenter) {
+
         list.forEachIndexed { index, anim ->
-            SwipeStrangerCard(modifier = Modifier
-                .padding(top = anim.paddingTopDp)
-                .zIndex(-anim.paddingTopDp.value)
-                .offset(x = anim.offsetXDp, y = anim.offsetYPx)
-                .rotate(anim.rotationValue)
-                .pointerInput(Unit) {
-                    detectDragGestures(
-                        onDragEnd = {
-                            coroutineScope.launch {
-                                anim.startDragEndAnim()
-                                onRemove.invoke(index)
+            key(anim.bean) {
+                val rememberIndex by rememberUpdatedState(newValue = index)
+
+                val paddingBottom by remember {
+                    derivedStateOf {
+                        if (rememberIndex == 0) {
+                            0.dp
+                        } else {
+                            val abs = if (abs((firstCardOffsetX) / 100.dp) >= 1.0f) {
+                                1.0f
+                            } else {
+                                abs((firstCardOffsetX) / 100.dp)
                             }
-                        },
-                        onDragCancel = {
-                            coroutineScope.launch {
-                                anim.startDragAnim(0.dp, 0.dp)
-                            }
-                        },
-                        onDrag = { change, dragAmount ->
-                            change.consume()
-                            coroutineScope.launch {
-                                anim.startDragAnim(dragAmount.x.toDp(), dragAmount.y.toDp())
-                            }
+                            paddingBetweenCards * rememberIndex - paddingBetweenCards * abs
                         }
-                    )
+                    }
                 }
-//                .clickable {
-//                    onRemove.invoke(index)
-//                }
-                .size(anim.widthDp, anim.heightDp)
-            ) {
-                Image(
-                    painterResource(id = anim.bean),
-                    contentDescription = "Same Card Type with Different Image",
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxSize()
-                )
+
+                val zIndex = remember {
+                    if (rememberIndex == 0) {
+                        1f
+                    } else {
+                        -paddingBottom.value
+                    }
+                }
+
+                val sizeWith by remember {
+                    derivedStateOf {
+                        initWidth - paddingBottom * (sizeBetweenCards / paddingBetweenCards)
+                    }
+                }
+
+
+                if (index == 0) {
+                    SwipeStrangerCard(modifier = Modifier
+                        .zIndex(zIndex)
+                        .rotate(anim.rotationValue)
+                        .offset(x = anim.offsetXDp, y = anim.offsetYDp)
+                        .pointerInput(Unit) {
+                            detectDragGestures(
+                                onDragEnd = {
+
+                                    coroutineScope.launch {
+                                        anim.startDragEndAnim()
+                                        if (anim.isRemove) {
+                                            onRemove.invoke(anim)
+                                        }
+                                        firstCardOffsetX = 0.dp
+                                        firstCardOffsetY = 0.dp
+                                    }
+
+                                },
+                                onDragCancel = {
+                                    firstCardOffsetX = 0.dp
+                                    firstCardOffsetY = 0.dp
+                                    coroutineScope.launch {
+                                        anim.startDragAnim(0.dp, 0.dp)
+                                    }
+                                },
+                                onDrag = { change, dragAmount ->
+                                    change.consume()
+                                    firstCardOffsetX += dragAmount.x.toDp()
+                                    firstCardOffsetY += dragAmount.y.toDp()
+
+                                    coroutineScope.launch {
+                                        Log.d("StrangerCardStack", "onDrag: " + anim.bean)
+                                        anim.startDragAnim(
+                                            dragAmount.x.toDp(),
+                                            dragAmount.y.toDp()
+                                        )
+                                    }
+                                }
+                            )
+                        }
+                        .size(sizeWith, initHeight)
+                    ) {
+                        Image(
+                            painterResource(id = anim.bean),
+                            contentDescription = "Same Card Type with Different Image",
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    }
+                } else {
+                    SwipeStrangerCard(
+                        modifier = Modifier
+                            .offset(y = -paddingBottom)
+                            .zIndex(zIndex)
+                            .size(sizeWith, initHeight)
+                    ) {
+                        Image(
+                            painterResource(id = anim.bean),
+                            contentDescription = "Same Card Type with Different Image",
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    }
+                }
             }
+
+
         }
     }
 
@@ -507,35 +581,30 @@ fun StrangerCardStack(
 }
 
 @Composable
-fun StrangerCardStackList(beans: MutableList<Int>) {
+fun StrangerCardStackList(beans: List<Int>, showCount: Int = 3) {
 
     val animatedSwipeStrangerCardList = remember { mutableStateListOf<AnimatedSwipeStrangerCard>() }
 
 
-    val stateResultList by remember {
-        derivedStateOf {
-            beans.forEach {
-                animatedSwipeStrangerCardList.add(
-                    AnimatedSwipeStrangerCard(
-                        bean = it,
-                        initWidth = 355.dp,
-                        initHeight = 611.dp
-                    )
-                )
-            }
-            animatedSwipeStrangerCardList
-        }
+    beans.forEach {
+        animatedSwipeStrangerCardList.add(
+            AnimatedSwipeStrangerCard(
+                bean = it,
+                initWidth = 355.dp,
+                initHeight = 611.dp
+            )
+        )
     }
 
-    val coroutineScope = rememberCoroutineScope()
 
     StrangerCardStack(
-        list = stateResultList,
-        cardCount = stateResultList.size,
+        list = animatedSwipeStrangerCardList,
+        3,
         onRemove = {
-            beans.removeAt(it)
+            animatedSwipeStrangerCardList.remove(it)
         },
-        coroutineScope = coroutineScope
+        initWidth = 355.dp,
+        initHeight = 611.dp
     )
 
 }
@@ -543,7 +612,7 @@ fun StrangerCardStackList(beans: MutableList<Int>) {
 @Composable
 @Preview(showBackground = true)
 private fun PreStrangerCardStackList() {
-    val drawables = remember{
+    val drawables = remember {
         mutableListOf(
             R.drawable.ic_test_1,
             R.drawable.ic_test_2,
