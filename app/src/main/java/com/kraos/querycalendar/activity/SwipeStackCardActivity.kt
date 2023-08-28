@@ -14,8 +14,10 @@ import androidx.compose.animation.core.TweenSpec
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -32,6 +34,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.itemsIndexed
+import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.Card
@@ -94,7 +100,7 @@ class SwipeStackCardActivity : BaseActivity() {
             R.drawable.ic_test_5,
         )
         setContent {
-            Box(
+            /*Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(color = Color.Gray),
@@ -112,8 +118,38 @@ class SwipeStackCardActivity : BaseActivity() {
                     cardCount = drawables.size,
                     paddingBetweenCards = 6.dp,
                 )
+            }*/
+            StrangerExploreWidget()
+        }
+    }
+}
+
+@Composable
+fun StrangerExploreWidget(
+    onLoadMore: () -> Unit = {}
+) {
+
+    LazyVerticalStaggeredGrid(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = Color.White),
+        columns = StaggeredGridCells.Fixed(2),
+        horizontalArrangement = Arrangement.spacedBy(10.dp),
+        verticalItemSpacing = 10.dp
+    ) {
+        itemsIndexed((0..20).toList()) { index, item ->
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(if (index == 3) 120.dp else 100.dp)
+                    .background(color = Color.Red)
+                    .border(1.dp, Color.Black),
+                contentAlignment = Alignment.Center
+            ) {
+                Text("$index")
             }
         }
+
     }
 }
 

@@ -22,8 +22,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -54,6 +56,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.kraos.querycalendar.R
@@ -67,15 +73,122 @@ class ComposeTestActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val testList = listOf("主播榜", "作品榜", "榮譽榜", "其它榜單")
-            HorizontalPager(count = 5) { page ->
+            HorizontalPager(count = 6) { page ->
                 when (page) {
                     0 -> TestRank(testList)
                     1 -> TestLearn("明日方舟")
                     2 -> TestAnimation()
                     3 -> TestAnimatedVisibility()
                     4 -> TestCustomModifier()
+                    5 -> TestComposeDialogParent()
                 }
             }
+        }
+    }
+}
+
+@Composable
+@Preview
+private fun TestComposeDialogParent(
+    modifier: Modifier = Modifier
+) {
+
+    var showDialog by remember { mutableStateOf(false) }
+
+    if (showDialog) {
+        Dialog(
+            onDismissRequest = { showDialog = false },
+            properties = DialogProperties(
+                dismissOnBackPress = true,
+                dismissOnClickOutside = true,
+                usePlatformDefaultWidth = false
+            )
+        ) {
+            Box {
+                TestComposeDialog(
+                    modifier = Modifier
+                        .padding(horizontal = 30.dp)
+                        .aspectRatio(335f / 445f)
+                        .background(Color.White)
+                ) {
+                    showDialog = false
+                }
+            }
+        }
+    }
+
+
+    Box(modifier = modifier.fillMaxSize()) {
+        Button(onClick = { showDialog = true }) {
+            Text(text = "Show Dialog")
+        }
+    }
+
+}
+
+
+@Composable
+@Preview
+private fun PreTestComposeDialog(
+) {
+    Box {
+        TestComposeDialog(
+            modifier = Modifier
+                .padding(horizontal = 30.dp)
+                .aspectRatio(335f / 445f)
+                .background(Color.White)
+        ) {
+
+        }
+    }
+}
+
+
+@Composable
+private fun TestComposeDialog(
+    modifier: Modifier = Modifier,
+    onClosed: () -> Unit = {}
+) {
+    ConstraintLayout(modifier = modifier) {
+        val (bg, box, button) = createRefs()
+
+        Box(
+            modifier = Modifier
+                .constrainAs(box) {
+                    top.linkTo(parent.top)
+                    bottom.linkTo(parent.bottom)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                }
+                .background(Color.White)
+                .padding(20.dp)
+        ) {
+            Text(text = "Compose Dialog")
+        }
+
+        Box(
+            modifier = Modifier
+                .constrainAs(bg) {
+                    top.linkTo(parent.top)
+                    bottom.linkTo(parent.bottom)
+                    linkTo(start = parent.start, end = parent.end)
+                    width = Dimension.percent(0.8f)
+                    height = Dimension.ratio("16:9")
+                }
+                .background(Color.Gray.copy(alpha = 0.5f))
+        )
+
+        Button(
+            onClick = onClosed,
+            modifier = Modifier
+                .constrainAs(button) {
+                    bottom.linkTo(parent.bottom)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                }
+                .padding(20.dp)
+        ) {
+            Text(text = "close")
         }
     }
 }
@@ -92,41 +205,48 @@ fun TestCustomModifier() {
             val paddingX = 10.dp.roundToPx()
             val paddingY = 5.dp.roundToPx()
             //测量内部元素尺寸
-            val placeable = measurable.measure(constraints.copy(
-                maxWidth = constraints.maxWidth - paddingX * 2,
-                maxHeight = constraints.maxHeight - paddingY * 2
-            ))
+            val placeable = measurable.measure(
+                constraints.copy(
+                    maxWidth = constraints.maxWidth - paddingX * 2,
+                    maxHeight = constraints.maxHeight - paddingY * 2
+                )
+            )
 
             //给定自身尺寸
             layout(placeable.width + paddingX * 2, placeable.height + paddingY * 2) {
                 placeable.placeRelative(paddingX, paddingY)
             }
         })
-        Text(text = "Kraos", Modifier.padding(10.dp).padding(10.dp).background(Color.Red))
+        Text(
+            text = "Kraos",
+            Modifier
+                .padding(10.dp)
+                .padding(10.dp)
+                .background(Color.Red)
+        )
     }
 }
 
 /**
  * AnimatedVisibility练习
  */
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 @Preview
-fun TestAnimatedVisibility(){
+fun TestAnimatedVisibility() {
     Column {
         var shown by remember { mutableStateOf(true) }
         AnimatedVisibility(visible = shown, enter = scaleIn()) {
             TestTransition()
         }
         Button(onClick = { shown = !shown }) {
-            Text(text = "切换",fontSize = 20.sp)
+            Text(text = "切换", fontSize = 20.sp)
         }
     }
 }
 
 @Composable
 @Preview
-fun TestTransition(){
+fun TestTransition() {
     var big by remember { mutableStateOf(false) }
     val bigTransition = updateTransition(targetState = big, label = "bigTransition")
     val size by bigTransition.animateDp(label = "size") {
@@ -152,7 +272,7 @@ fun TestTransition(){
         }
 
         Button(onClick = { shown = !shown }) {
-            Text(text = "切换",fontSize = 20.sp)
+            Text(text = "切换", fontSize = 20.sp)
         }
 
     }
@@ -179,9 +299,9 @@ fun TestAnimation() {
         )
     }
 
-    LaunchedEffect(Unit){
+    LaunchedEffect(Unit) {
         delay(1000)
-        decayAnim.animateDecay(1000.dp,decay)
+        decayAnim.animateDecay(1000.dp, decay)
     }
 
 
