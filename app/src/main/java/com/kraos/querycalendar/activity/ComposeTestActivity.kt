@@ -51,6 +51,7 @@ import androidx.compose.ui.layout.AlignmentLine
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.MeasureResult
 import androidx.compose.ui.layout.layout
+import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -73,7 +74,7 @@ class ComposeTestActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val testList = listOf("主播榜", "作品榜", "榮譽榜", "其它榜單")
-            HorizontalPager(count = 6) { page ->
+            HorizontalPager(count = 7) { page ->
                 when (page) {
                     0 -> TestRank(testList)
                     1 -> TestLearn("明日方舟")
@@ -81,9 +82,37 @@ class ComposeTestActivity : BaseActivity() {
                     3 -> TestAnimatedVisibility()
                     4 -> TestCustomModifier()
                     5 -> TestComposeDialogParent()
+                    6 -> TestParentDataModifier()
                 }
             }
         }
+    }
+}
+
+@Composable
+@Preview
+fun TestParentDataModifier() {
+    Row {
+        Box(
+            modifier = Modifier
+                .size(40.dp)
+                .background(color = Color.Red)
+                .weight(1f)
+        )
+        Box(
+            modifier = Modifier
+                .size(40.dp)
+                .background(color = Color.Green)
+                .weight(1f)
+        )
+        Box(
+            modifier = Modifier
+                .size(40.dp)
+                .background(color = Color.Blue)
+        )
+        //给组件设置一个独特的标签
+        Modifier.layoutId("Kraos")
+
     }
 }
 
