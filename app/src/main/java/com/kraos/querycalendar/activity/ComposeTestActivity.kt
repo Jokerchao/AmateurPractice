@@ -33,13 +33,22 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -47,6 +56,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.AlignmentLine
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.MeasureResult
@@ -74,7 +84,7 @@ class ComposeTestActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val testList = listOf("主播榜", "作品榜", "榮譽榜", "其它榜單")
-            HorizontalPager(count = 7) { page ->
+            HorizontalPager(count = 8) { page ->
                 when (page) {
                     0 -> TestRank(testList)
                     1 -> TestLearn("明日方舟")
@@ -83,7 +93,30 @@ class ComposeTestActivity : BaseActivity() {
                     4 -> TestCustomModifier()
                     5 -> TestComposeDialogParent()
                     6 -> TestParentDataModifier()
+                    7 -> TestSnapshotFlow()
                 }
+            }
+        }
+    }
+}
+
+
+@Composable
+@Preview
+fun TestSnapshotFlow(){
+    Column {
+        var name by remember { mutableStateOf("Kraos") }
+        //将任意多个state转换成一个flow
+        val flow = snapshotFlow {
+            name
+        }
+        Text(text = name)
+        Button(onClick = { name += "1" }) {
+            Text(text = "切换", fontSize = 20.sp)
+        }
+        LaunchedEffect(Unit){
+            flow.collect {
+                println(it)
             }
         }
     }
@@ -92,7 +125,26 @@ class ComposeTestActivity : BaseActivity() {
 @Composable
 @Preview
 fun TestParentDataModifier() {
+//    val state = produceState(initialValue = 1){
+//        //这里的代码是协程的环境 在协程中更新该state的值
+//        delay(1000)
+//        value = 2
+//    }
+//    Text(text = state.value.toString())
+
     Row {
+        SideEffect {
+            println("Kraos:TestParentDataModifier")
+        }
+
+        DisposableEffect(Unit){
+            println("Kraos:进入界面啦")
+            onDispose {
+                //离开界面的通知回调
+                println("Kraos:离开界面啦")
+            }
+        }
+
         Box(
             modifier = Modifier
                 .size(40.dp)
@@ -114,6 +166,39 @@ fun TestParentDataModifier() {
         Modifier.layoutId("Kraos")
 
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+@Preview
+private fun TestScaffold() {
+    // 1. Create the TopAppBarScrollBehavior
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text("My App")
+                },
+                // 2. Provide scrollBehavior to TopAppBar
+                scrollBehavior = scrollBehavior
+            )
+        },
+        // 3. Connect the scrollBehavior.nestedScrollConnection to the Scaffold
+        modifier = Modifier
+            .fillMaxSize()
+            .nestedScroll(scrollBehavior.nestedScrollConnection)
+    ) { _ ->
+        /* Contents */
+        Column{
+            (0..100).forEach {
+                Text(text = "Kraos")
+            }
+        }
+
+    }
+
 }
 
 @Composable

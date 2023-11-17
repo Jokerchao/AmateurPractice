@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
     <uses-permission android:name="android.permission.WRITE_CALENDAR" />
     <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="true"
@@ -13,17 +14,24 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/Theme.AppCompat"
+        android:usesCleartextTraffic="true">
+        <activity
+            android:name=".activity.TestKeyBoardActivity"
+            android:windowSoftInputMode="adjustPan"
+            android:exported="false" />
         <activity
             android:name=".activity.TestTextColorFormatActivity"
             android:exported="false" />
         <activity
             android:name=".activity.ComposeTestActivity"
             android:exported="false" />
-        <activity android:name=".activity.SwipeStackCardActivity"
-            android:exported="false"/>
-        <activity android:name=".activity.SwipeStrangerCardActivity"
-            android:exported="false"/>
+        <activity
+            android:name=".activity.SwipeStackCardActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.SwipeStrangerCardActivity"
+            android:exported="false" />
         <activity
             android:name=".activity.TestProxyActivity"
             android:exported="false" />
@@ -79,6 +87,7 @@
             android:name=".activity.TestDragViewActivity"
             android:exported="false" />
         <activity
+            android:theme="@style/Theme.AppCompat.Light"
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
