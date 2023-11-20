@@ -3,16 +3,18 @@ package com.kraos.querycalendar.activity
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.VectorConverter
 import androidx.compose.animation.core.animateDp
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.keyframes
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.updateTransition
 import androidx.compose.animation.rememberSplineBasedDecay
 import androidx.compose.animation.scaleIn
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -25,7 +27,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -44,27 +45,30 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.Paint
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
+import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.layout.AlignmentLine
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.MeasureResult
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -84,7 +88,7 @@ class ComposeTestActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val testList = listOf("主播榜", "作品榜", "榮譽榜", "其它榜單")
-            HorizontalPager(count = 8) { page ->
+            HorizontalPager(count = 9) { page ->
                 when (page) {
                     0 -> TestRank(testList)
                     1 -> TestLearn("明日方舟")
@@ -94,7 +98,54 @@ class ComposeTestActivity : BaseActivity() {
                     5 -> TestComposeDialogParent()
                     6 -> TestParentDataModifier()
                     7 -> TestSnapshotFlow()
+                    8 -> TestCustomComposeDraw()
                 }
+            }
+        }
+    }
+}
+
+@Composable
+@Preview
+fun TestCustomComposeDraw() {
+    val image = ImageBitmap.imageResource(R.drawable.ic_test_1)
+    val paint by remember { mutableStateOf(Paint()) }
+    val camera by remember { mutableStateOf(android.graphics.Camera()) }
+    val rotateAnim = remember { Animatable(0f) }
+    LaunchedEffect(Unit) {
+        rotateAnim.animateTo(360f, infiniteRepeatable(tween(2000)))
+    }
+    //Canvas=Spacer +  drawBehind
+    Column {
+        Text(text = "Kraos", modifier = Modifier.drawBehind {
+            drawRect(Color.Red)
+        })
+//        Canvas(Modifier.size(100.dp).graphicsLayer {
+//            //RenderNode (API 21)
+//            rotationX = 45f
+//        }) {
+//            rotateRad(3f){
+//                drawImage(image, dstSize = IntSize(size.width.toInt(), size.height.toInt()))
+//            }
+//        }
+        Canvas(
+            Modifier
+                .size(100.dp)
+        ) {
+            drawIntoCanvas {
+                it.translate(size.width / 2, size.height / 2f)
+                it.rotate(-45f)
+                camera.save()
+                camera.rotateX(rotateAnim.value)
+                camera.applyToCanvas(it.nativeCanvas)
+                camera.restore()
+                it.rotate(45f)
+                it.translate(-size.width / 2, -size.height / 2f)
+                it.drawImageRect(
+                    image,
+                    dstSize = IntSize(size.width.toInt(), size.height.toInt()),
+                    paint = paint
+                )
             }
         }
     }
@@ -103,7 +154,7 @@ class ComposeTestActivity : BaseActivity() {
 
 @Composable
 @Preview
-fun TestSnapshotFlow(){
+fun TestSnapshotFlow() {
     Column {
         var name by remember { mutableStateOf("Kraos") }
         //将任意多个state转换成一个flow
@@ -114,7 +165,7 @@ fun TestSnapshotFlow(){
         Button(onClick = { name += "1" }) {
             Text(text = "切换", fontSize = 20.sp)
         }
-        LaunchedEffect(Unit){
+        LaunchedEffect(Unit) {
             flow.collect {
                 println(it)
             }
@@ -137,7 +188,7 @@ fun TestParentDataModifier() {
             println("Kraos:TestParentDataModifier")
         }
 
-        DisposableEffect(Unit){
+        DisposableEffect(Unit) {
             println("Kraos:进入界面啦")
             onDispose {
                 //离开界面的通知回调
@@ -191,7 +242,7 @@ private fun TestScaffold() {
             .nestedScroll(scrollBehavior.nestedScrollConnection)
     ) { _ ->
         /* Contents */
-        Column{
+        Column {
             (0..100).forEach {
                 Text(text = "Kraos")
             }
