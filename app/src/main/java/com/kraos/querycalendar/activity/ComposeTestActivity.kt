@@ -62,6 +62,7 @@ import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.res.imageResource
@@ -81,6 +82,7 @@ import com.kraos.querycalendar.R
 import com.kraos.querycalendar.view.TestLearn
 import com.kraos.querycalendar.view.advancedShadow
 import kotlinx.coroutines.delay
+import kotlin.math.max
 
 class ComposeTestActivity : BaseActivity() {
     @OptIn(ExperimentalPagerApi::class)
@@ -100,6 +102,27 @@ class ComposeTestActivity : BaseActivity() {
                     7 -> TestSnapshotFlow()
                     8 -> TestCustomComposeDraw()
                 }
+            }
+        }
+    }
+}
+
+@Composable
+fun CustomLayout(modifier: Modifier = Modifier,content: @Composable () -> Unit) {
+    Layout(content) { measurables, constraints ->
+        var width = 0
+        var height = 0
+        val placeables = measurables.map {measurable ->
+            measurable.measure(constraints).also { placeable ->
+                width = max(width,placeable.width)
+                height += placeable.height
+            }
+        }
+        layout(width,height){
+            var totalHeight = 0
+            placeables.forEach {
+                it.placeRelative(0,totalHeight)
+                totalHeight += it.height
             }
         }
     }
@@ -147,6 +170,11 @@ fun TestCustomComposeDraw() {
                     paint = paint
                 )
             }
+        }
+        CustomLayout {
+            Text(text = "Kraos", color = Color.Red)
+            Text(text = "Kraos", color = Color.Blue)
+            Text(text = "Kraos", color = Color.Green)
         }
     }
 }
