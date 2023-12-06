@@ -1,5 +1,6 @@
 package com.kraos.querycalendar.activity
 
+import Orientation.Horizontal
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.compose.animation.AnimatedVisibility
@@ -19,6 +20,11 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.draggable
+import androidx.compose.foundation.gestures.rememberDraggableState
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsDraggedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,6 +33,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -44,6 +51,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -63,12 +71,14 @@ import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.layout.LookaheadScope
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -76,6 +86,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import androidx.lifecycle.LifecycleRegistry
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.kraos.querycalendar.R
@@ -83,11 +94,13 @@ import com.kraos.querycalendar.view.TestLearn
 import com.kraos.querycalendar.view.advancedShadow
 import kotlinx.coroutines.delay
 import kotlin.math.max
+import kotlin.math.roundToInt
 
 class ComposeTestActivity : BaseActivity() {
     @OptIn(ExperimentalPagerApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        LifecycleRegistry(this)
         setContent {
             val testList = listOf("主播榜", "作品榜", "榮譽榜", "其它榜單")
             HorizontalPager(count = 9) { page ->
@@ -138,6 +151,9 @@ fun TestCustomComposeDraw() {
     LaunchedEffect(Unit) {
         rotateAnim.animateTo(360f, infiniteRepeatable(tween(2000)))
     }
+    LookaheadScope() {
+
+    }
     //Canvas=Spacer +  drawBehind
     Column {
         Text(text = "Kraos", modifier = Modifier.drawBehind {
@@ -176,7 +192,30 @@ fun TestCustomComposeDraw() {
             Text(text = "Kraos", color = Color.Blue)
             Text(text = "Kraos", color = Color.Green)
         }
+
+        val interactionSource = remember { MutableInteractionSource() }
+        var textOffsetX by remember { mutableFloatStateOf(0f) }
+
+        //自定义触摸
+        Text(
+            text = "触摸事件测试",
+            modifier = Modifier.offset {
+                IntOffset(textOffsetX.roundToInt(), 0)
+            }.draggable(
+                state = rememberDraggableState(onDelta = { delta ->
+                    println("Kraos:delta:$delta")
+                    textOffsetX += delta
+                }),
+                orientation = Orientation.Horizontal,
+                interactionSource = interactionSource
+            )
+        )
+
+        val isDragged = interactionSource.collectIsDraggedAsState()
+        Text(text = "isDragged:${isDragged.value}")
+
     }
+
 }
 
 
