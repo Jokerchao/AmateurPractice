@@ -31,6 +31,7 @@ import com.kraos.querycalendar.activity.TestAnimateActivity
 import com.kraos.querycalendar.activity.TestCustomViewActivity
 import com.kraos.querycalendar.activity.TestDragViewActivity
 import com.kraos.querycalendar.activity.TestKeyBoardActivity
+import com.kraos.querycalendar.activity.TestPopupActivity
 import com.kraos.querycalendar.activity.TestProxyActivity
 import com.kraos.querycalendar.activity.TestSelectActivity
 import com.kraos.querycalendar.activity.TestTextColorFormatActivity
@@ -63,6 +64,7 @@ class MainActivity : AppCompatActivity() {
             add("仿探探卡片滑动交互")
             add("陌生人社交练习")
             add("软键盘弹出练习")
+            add("Popup练习")
         }
     }
 
@@ -133,6 +135,7 @@ class MainActivity : AppCompatActivity() {
                     21 -> SwipeStackCardActivity().bootActivity(this@MainActivity)
                     22 -> SwipeStrangerCardActivity().bootActivity(this@MainActivity)
                     23 -> TestKeyBoardActivity().bootActivity(this@MainActivity)
+                    24 -> TestPopupActivity().bootActivity(this@MainActivity)
                 }
             }
         }

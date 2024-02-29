@@ -21,6 +21,9 @@
             android:windowSoftInputMode="adjustPan"
             android:exported="false" />
         <activity
+            android:name=".activity.TestPopupActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.TestTextColorFormatActivity"
             android:exported="false" />
         <activity

@@ -69,11 +69,14 @@ import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.AlignmentLine
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.LookaheadScope
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -84,6 +87,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.compose.ui.window.Popup
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.LifecycleRegistry
@@ -235,6 +239,34 @@ fun TestSnapshotFlow() {
         LaunchedEffect(Unit) {
             flow.collect {
                 println(it)
+            }
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun TestPopUp() {
+    val offsetY = with(LocalDensity.current){
+        -60.dp.roundToPx()
+    }
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = Color.Blue)
+
+    ) {
+        Popup(
+            alignment = Alignment.TopCenter,
+            offset = IntOffset(0, offsetY),
+        ) {
+            Box(
+                modifier = Modifier
+                    .background(color = Color.Red)
+                    .size(120.dp,60.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(text = "Popup message", fontSize = 15.sp)
             }
         }
     }
