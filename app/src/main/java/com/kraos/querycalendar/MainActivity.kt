@@ -115,7 +115,7 @@ class MainActivity : AppCompatActivity() {
                     1 -> ScheduleTestActivity.bootActivity(this@MainActivity)
                     2 -> DatePickerTestActivity.bootActivity(this@MainActivity)
                     3 -> RichEditorTestActivity.bootActivity(this@MainActivity)
-                    4 -> CoroutinesTestActivity.bootActivity(this@MainActivity)
+                    4 -> CoroutinesTestActivity().bootActivity(this@MainActivity)
                     5 -> IllegalStateTestActivity.bootActivity(this@MainActivity)
                     6 -> DragViewTestActivity.bootActivity(this@MainActivity)
                     7 -> KotlinTestActivity.bootActivity(this@MainActivity)
