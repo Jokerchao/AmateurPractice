@@ -44,6 +44,5 @@ class TestKeyBoardActivity : BaseActivity() {
 
             loadUrl("https://www.baidu.com")
         }
-
     }
 }
