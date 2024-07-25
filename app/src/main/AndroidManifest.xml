@@ -5,7 +5,7 @@
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
     <uses-permission android:name="android.permission.WRITE_CALENDAR" />
     <uses-permission android:name="android.permission.READ_CALENDAR" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -17,9 +17,12 @@
         android:theme="@style/Theme.AppCompat"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".activity.TestKeyBoardActivity"
-            android:windowSoftInputMode="adjustPan"
+            android:name=".activity.ZoomPagerActivity"
             android:exported="false" />
+        <activity
+            android:name=".activity.TestKeyBoardActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.TestPopupActivity"
             android:exported="false" />
@@ -90,9 +93,9 @@
             android:name=".activity.TestDragViewActivity"
             android:exported="false" />
         <activity
-            android:theme="@style/Theme.AppCompat.Light"
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
