@@ -125,20 +125,20 @@ class ComposeTestActivity : BaseActivity() {
 }
 
 @Composable
-fun CustomLayout(modifier: Modifier = Modifier,content: @Composable () -> Unit) {
+fun CustomLayout(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
     Layout(content) { measurables, constraints ->
         var width = 0
         var height = 0
-        val placeables = measurables.map {measurable ->
+        val placeables = measurables.map { measurable ->
             measurable.measure(constraints).also { placeable ->
-                width = max(width,placeable.width)
+                width = max(width, placeable.width)
                 height += placeable.height
             }
         }
-        layout(width,height){
+        layout(width, height) {
             var totalHeight = 0
             placeables.forEach {
-                it.placeRelative(0,totalHeight)
+                it.placeRelative(0, totalHeight)
                 totalHeight += it.height
             }
         }
@@ -203,20 +203,39 @@ fun TestCustomComposeDraw() {
         //自定义触摸
         Text(
             text = "触摸事件测试",
-            modifier = Modifier.offset {
-                IntOffset(textOffsetX.roundToInt(), 0)
-            }.draggable(
-                state = rememberDraggableState(onDelta = { delta ->
-                    println("Kraos:delta:$delta")
-                    textOffsetX += delta
-                }),
-                orientation = Orientation.Horizontal,
-                interactionSource = interactionSource
-            )
+            modifier = Modifier
+                .offset {
+                    IntOffset(textOffsetX.roundToInt(), 0)
+                }
+                .draggable(
+                    state = rememberDraggableState(onDelta = { delta ->
+                        println("Kraos:delta:$delta")
+                        textOffsetX += delta
+                    }),
+                    orientation = Orientation.Horizontal,
+                    interactionSource = interactionSource
+                )
         )
 
         val isDragged = interactionSource.collectIsDraggedAsState()
         Text(text = "isDragged:${isDragged.value}")
+
+        var listOffsetY by remember { mutableFloatStateOf(0f) }
+        //嵌套滑动
+        Column(
+            Modifier.offset {
+                IntOffset(0, listOffsetY.roundToInt())
+            }.draggable(
+                state = rememberDraggableState(onDelta = { delta ->
+                    listOffsetY += delta
+                }),
+                orientation = Orientation.Vertical,
+            )
+        ) {
+            for (i in 0..10) {
+                Text(text = "第$i 个元素")
+            }
+        }
 
     }
 

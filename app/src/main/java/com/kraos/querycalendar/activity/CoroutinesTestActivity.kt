@@ -8,8 +8,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.kraos.querycalendar.databinding.ActivityCoroutinesTestBinding
 import kotlinx.coroutines.*
 
-@ExperimentalCoroutinesApi
-class CoroutinesTestActivity : AppCompatActivity(), CoroutineScope by MainScope() {
+//@ExperimentalCoroutinesApi
+class CoroutinesTestActivity : BaseActivity(), CoroutineScope by MainScope() {
 
     private lateinit var binding: ActivityCoroutinesTestBinding
 
@@ -117,10 +117,10 @@ class CoroutinesTestActivity : AppCompatActivity(), CoroutineScope by MainScope(
 
         private const val TAG = "CoroutinesTestActivity"
 
-        fun bootActivity(context: Context) {
-            var intent = Intent(context, CoroutinesTestActivity::class.java)
-            context.startActivity(intent)
-        }
+//        fun bootActivity(context: Context) {
+//            val intent = Intent(context, CoroutinesTestActivity::class.java)
+//            context.startActivity(intent)
+//        }
     }
 
     fun loadDataAndShow() {

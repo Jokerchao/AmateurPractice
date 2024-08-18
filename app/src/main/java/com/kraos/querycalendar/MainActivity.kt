@@ -35,6 +35,7 @@ import com.kraos.querycalendar.activity.TestPopupActivity
 import com.kraos.querycalendar.activity.TestProxyActivity
 import com.kraos.querycalendar.activity.TestSelectActivity
 import com.kraos.querycalendar.activity.TestTextColorFormatActivity
+import com.kraos.querycalendar.activity.ZoomPagerActivity
 
 class MainActivity : AppCompatActivity() {
     //数据源
@@ -65,6 +66,7 @@ class MainActivity : AppCompatActivity() {
             add("陌生人社交练习")
             add("软键盘弹出练习")
             add("Popup练习")
+            add("ZoomPager练习")
         }
     }
 
@@ -115,7 +117,7 @@ class MainActivity : AppCompatActivity() {
                     1 -> ScheduleTestActivity.bootActivity(this@MainActivity)
                     2 -> DatePickerTestActivity.bootActivity(this@MainActivity)
                     3 -> RichEditorTestActivity.bootActivity(this@MainActivity)
-                    4 -> CoroutinesTestActivity.bootActivity(this@MainActivity)
+                    4 -> CoroutinesTestActivity().bootActivity(this@MainActivity)
                     5 -> IllegalStateTestActivity.bootActivity(this@MainActivity)
                     6 -> DragViewTestActivity.bootActivity(this@MainActivity)
                     7 -> KotlinTestActivity.bootActivity(this@MainActivity)
@@ -136,6 +138,7 @@ class MainActivity : AppCompatActivity() {
                     22 -> SwipeStrangerCardActivity().bootActivity(this@MainActivity)
                     23 -> TestKeyBoardActivity().bootActivity(this@MainActivity)
                     24 -> TestPopupActivity().bootActivity(this@MainActivity)
+                    25 -> ZoomPagerActivity().bootActivity(this@MainActivity)
                 }
             }
         }
