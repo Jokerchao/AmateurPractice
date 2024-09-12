@@ -99,15 +99,25 @@ public class TestSelectActivity extends AppCompatActivity {
             @Override
             public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
                 //根据item的ID处理点击事件
-                switch (item.getItemId()) {
-                    case R.id.Informal22:
-                        Toast.makeText(TestSelectActivity.this, "点击的是自定义", Toast.LENGTH_SHORT).show();
-                        mode.finish();//收起操作菜单
-                        break;
-                    case R.id.Informal33:
-                        Toast.makeText(TestSelectActivity.this, "点击的是创建待办", Toast.LENGTH_SHORT).show();
-                        mode.finish();
-                        break;
+//                switch (item.getItemId()) {
+//                    case R.id.informal_22:
+//                        Toast.makeText(TestSelectActivity.this, "点击的是自定义", Toast.LENGTH_SHORT).show();
+//                        mode.finish();//收起操作菜单
+//                        break;
+//                    case R.id.informal_33:
+//                        Toast.makeText(TestSelectActivity.this, "点击的是创建待办", Toast.LENGTH_SHORT).show();
+//                        mode.finish();
+//                        break;
+//                    default:
+//                        break;
+//                }
+//                return true;
+                if (item.getItemId() == R.id.informal_22) {
+                    Toast.makeText(TestSelectActivity.this, "点击的是自定义", Toast.LENGTH_SHORT).show();
+                    mode.finish();//收起操作菜单
+                } else if (item.getItemId() == R.id.informal_33) {
+                    Toast.makeText(TestSelectActivity.this, "点击的是创建待办", Toast.LENGTH_SHORT).show();
+                    mode.finish();
                 }
                 return true;
             }
@@ -139,15 +149,22 @@ public class TestSelectActivity extends AppCompatActivity {
             @Override
             public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
                 //根据item的ID处理点击事件
-                switch (item.getItemId()) {
-                    case R.id.Informal22:
-                        Toast.makeText(TestSelectActivity.this, "点击的是自定义", Toast.LENGTH_SHORT).show();
-                        mode.finish();//收起操作菜单
-                        break;
-                    case R.id.Informal33:
-                        Toast.makeText(TestSelectActivity.this, "点击的是创建待办", Toast.LENGTH_SHORT).show();
-                        mode.finish();
-                        break;
+//                switch (item.getItemId()) {
+//                    case R.id.Informal22:
+//                        Toast.makeText(TestSelectActivity.this, "点击的是自定义", Toast.LENGTH_SHORT).show();
+//                        mode.finish();//收起操作菜单
+//                        break;
+//                    case R.id.Informal33:
+//                        Toast.makeText(TestSelectActivity.this, "点击的是创建待办", Toast.LENGTH_SHORT).show();
+//                        mode.finish();
+//                        break;
+//                }
+                if (item.getItemId() == R.id.informal_22) {
+                    Toast.makeText(TestSelectActivity.this, "点击的是自定义", Toast.LENGTH_SHORT).show();
+                    mode.finish();//收起操作菜单
+                } else if (item.getItemId() == R.id.informal_33) {
+                    Toast.makeText(TestSelectActivity.this, "点击的是创建待办", Toast.LENGTH_SHORT).show();
+                    mode.finish();
                 }
                 return false;
             }

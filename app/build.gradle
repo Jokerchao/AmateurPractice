@@ -5,6 +5,7 @@ apply plugin: 'kotlin-kapt'
 //apply plugin: 'kotlin-android-extensions'
 
 android {
+    namespace 'com.kraos.querycalendar'
     compileSdk 34
     defaultConfig {
         applicationId "com.kraos.querycalendar"
