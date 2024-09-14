@@ -2,15 +2,24 @@ package com.kraos.querycalendar.compose_widget
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.Placeable
 import androidx.compose.ui.layout.SubcomposeLayout
+import androidx.compose.ui.layout.layout
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -113,7 +122,7 @@ fun LazyAutoSkipHorizontal(
     skipIndicator: @Composable () -> Unit,
     verticalAlignment: Alignment.Vertical = Alignment.CenterVertically,
     horizontalSpacing: Dp = 0.dp,
-    content: List<@Composable () -> Unit>,
+    content: @Composable () -> Unit,
 ) {
 
     SubcomposeLayout(modifier = modifier) { constraints ->
@@ -122,19 +131,15 @@ fun LazyAutoSkipHorizontal(
         var maxShowItem = 0
 
         // 逐步测量子项，直到填满布局宽度
-        for (item in content) {
-            val placeable = subcompose(Slot.Content) { item() }
-                .map { it.measure(constraints.copy(minWidth = 0)) }
-                .first()
-
+        val measures = subcompose(Slot.Content, content)
+        measures.forEach { measure ->
+            val placeable = measure.measure(constraints.copy(minWidth = 0))
             if (layoutWidth + placeable.width + horizontalSpacing.roundToPx() > constraints.maxWidth) {
-                break
+                return@forEach
             }
-
             if (maxShowItem != 0) {
                 layoutWidth += horizontalSpacing.roundToPx()
             }
-
             layoutWidth += placeable.width
             placeables.add(placeable)
             maxShowItem++
@@ -145,7 +150,7 @@ fun LazyAutoSkipHorizontal(
             .map { it.measure(constraints.copy(minWidth = 0)) }
             .firstOrNull() ?: error("没有指示器")
 
-        if (maxShowItem < content.size) {
+        if (maxShowItem < measures.size) {
             layoutWidth += horizontalSpacing.roundToPx() + indicatorPlaceable.width
         }
 
@@ -171,15 +176,66 @@ fun LazyAutoSkipHorizontal(
                 left += placeable.width
             }
 
-            if (maxShowItem < content.size) {
+            if (maxShowItem < measures.size) {
                 left += horizontalSpacing.roundToPx()
                 indicatorPlaceable.placeRelative(
                     x = left,
-                    y = verticalAlignment.align(size = indicatorPlaceable.height, space = layoutHeight)
+                    y = verticalAlignment.align(
+                        size = indicatorPlaceable.height,
+                        space = layoutHeight
+                    )
                 )
             }
         }
     }
+}
+
+/**
+ * 只是为了证明Layout和SubcomposeLayout的区别,实际操作中不会这样写,SubcomposeLayout更适合这种情况
+ */
+@Composable
+fun AutoSkipHorizontal1(
+    modifier: Modifier = Modifier,
+    skipIndicator: @Composable () -> Unit,
+    content: @Composable () -> Unit
+) {
+
+    Layout(
+        content = {
+            content()
+            skipIndicator()
+        }) { measurables, constraints ->
+        val placeables = measurables.map { it.measure(constraints) }
+        var totalWidth = 0
+        val layoutHeight = placeables.minOf { it.height }
+        var showMaxCount = 0
+
+        placeables.forEach {
+            if (totalWidth + it.width >= constraints.maxWidth) {
+                if (placeables.last().width + totalWidth > constraints.maxWidth) {
+                    showMaxCount--
+                }
+                return@forEach
+            }
+            totalWidth += it.width
+            showMaxCount++
+        }
+
+        layout(constraints.maxWidth, layoutHeight) {
+            var left = 0
+            placeables.forEachIndexed { index, placeable ->
+                if (index >= showMaxCount - 1) {
+                    return@forEachIndexed
+                }
+                placeable.placeRelative(left, 0)
+                left += placeable.width
+            }
+            if (showMaxCount < placeables.size - 1) {
+                placeables.last().placeRelative(left, 0)
+            }
+        }
+    }
+
 }
 
 @Composable
@@ -213,6 +269,34 @@ private fun PreviewAutoSkipHorizontal() {
 
 @Composable
 @Preview
+private fun PreviewAutoSkipHorizontal1() {
+
+    AutoSkipHorizontal1(
+        modifier = Modifier.fillMaxWidth(),
+        skipIndicator = {
+            Box(
+                Modifier
+                    .size(20.dp, 60.dp)
+                    .background(Color.Red)
+            )
+        },
+    ) {
+        (0..8).forEach {
+            Box(
+                Modifier
+                    .size(60.dp, 20.dp)
+                    .background(Color.Green),
+                contentAlignment = Alignment.Center
+            ) {
+                Text("$it")
+            }
+        }
+    }
+
+}
+
+@Composable
+@Preview
 private fun PreviewLazyAutoSkipHorizontal() {
 
     AutoSkipHorizontal(
@@ -226,7 +310,7 @@ private fun PreviewLazyAutoSkipHorizontal() {
         },
         horizontalSpacing = 10.dp
     ) {
-        (0..5).forEach {
+        (0..3).forEach {
             Box(
                 Modifier
                     .size(60.dp, 20.dp)
