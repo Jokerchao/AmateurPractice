@@ -44,7 +44,11 @@ object CountdownTimerWidget {
             fontSize = 36.sp,
             fontWeight = FontWeight.Bold
         ),
-        val bgColors: List<Color> = listOf(Color.Yellow, Color.Black) // 进度环渐变色
+        val bgColors: List<Color> =
+            listOf(
+                Color.Yellow.copy(0.5f),
+                Color.Black.copy(0.5f),
+            ) // 进度环渐变色
     )
 
     private val LocalCountdownTimerProperties = compositionLocalOf {
@@ -56,7 +60,7 @@ object CountdownTimerWidget {
         modifier: Modifier = Modifier,
         properties: CountdownTimerProperties = LocalCountdownTimerProperties.current,
         onTimerEnd: () -> Unit = {} // 倒计时结束回调
-    ){
+    ) {
         var timeLeft by remember {
             val time = properties.totalTime
             mutableIntStateOf(time)
@@ -111,7 +115,7 @@ object CountdownTimerWidget {
 
 @Composable
 @Preview
-fun CountdownTimerWidgetPreview(){
+fun CountdownTimerWidgetPreview() {
     CountdownTimerWidget.Content(
         modifier = Modifier.size(150.dp),
     )
