@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.kraos.querycalendar.activity.CameraViewActivity
 import com.kraos.querycalendar.activity.ComposeTestActivity
 import com.kraos.querycalendar.activity.CoroutinesTestActivity
+import com.kraos.querycalendar.activity.CountdownTimerTestActivity
 import com.kraos.querycalendar.activity.DashBoardActivity
 import com.kraos.querycalendar.activity.DatePickerTestActivity
 import com.kraos.querycalendar.activity.DragViewTestActivity
@@ -67,6 +68,7 @@ class MainActivity : AppCompatActivity() {
             add("软键盘弹出练习")
             add("Popup练习")
             add("ZoomPager练习")
+            add("倒计时动画练习")
         }
     }
 
@@ -139,6 +141,7 @@ class MainActivity : AppCompatActivity() {
                     23 -> TestKeyBoardActivity().bootActivity(this@MainActivity)
                     24 -> TestPopupActivity().bootActivity(this@MainActivity)
                     25 -> ZoomPagerActivity().bootActivity(this@MainActivity)
+                    26 -> CountdownTimerTestActivity().bootActivity(this@MainActivity)
                 }
             }
         }

@@ -17,6 +17,9 @@
         android:theme="@style/Theme.AppCompat"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".activity.CountdownTimerTestActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.ZoomPagerActivity"
             android:exported="false" />
         <activity
