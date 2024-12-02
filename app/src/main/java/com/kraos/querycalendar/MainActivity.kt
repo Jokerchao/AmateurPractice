@@ -32,6 +32,7 @@ import com.kraos.querycalendar.activity.TestAnimateActivity
 import com.kraos.querycalendar.activity.TestCustomViewActivity
 import com.kraos.querycalendar.activity.TestDragViewActivity
 import com.kraos.querycalendar.activity.TestKeyBoardActivity
+import com.kraos.querycalendar.activity.TestPhotoPickerActivity
 import com.kraos.querycalendar.activity.TestPopupActivity
 import com.kraos.querycalendar.activity.TestProxyActivity
 import com.kraos.querycalendar.activity.TestSelectActivity
@@ -69,6 +70,7 @@ class MainActivity : AppCompatActivity() {
             add("Popup练习")
             add("ZoomPager练习")
             add("倒计时动画练习")
+            add("图片选择器练习")
         }
     }
 
@@ -142,6 +144,7 @@ class MainActivity : AppCompatActivity() {
                     24 -> TestPopupActivity().bootActivity(this@MainActivity)
                     25 -> ZoomPagerActivity().bootActivity(this@MainActivity)
                     26 -> CountdownTimerTestActivity().bootActivity(this@MainActivity)
+                    27 -> TestPhotoPickerActivity().bootActivity(this@MainActivity)
                 }
             }
         }
