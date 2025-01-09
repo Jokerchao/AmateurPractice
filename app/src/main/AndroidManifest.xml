@@ -17,6 +17,9 @@
         android:theme="@style/Theme.AppCompat"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".activity.TestCalenderHistoryActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.TestPhotoPickerActivity"
             android:exported="false" />
         <activity
@@ -113,15 +116,15 @@
             android:exported="false" />
 
         <!-- Trigger Google Play services to install the backported photo picker module. -->
-<!--        <service android:name="com.google.android.gms.metadata.ModuleDependencies"-->
-<!--            android:enabled="false"-->
-<!--            android:exported="false"-->
-<!--            tools:ignore="MissingClass">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="com.google.android.gms.metadata.MODULE_DEPENDENCIES" />-->
-<!--            </intent-filter>-->
-<!--            <meta-data android:name="photopicker_activity:0:required" android:value="" />-->
-<!--        </service>-->
+        <!--        <service android:name="com.google.android.gms.metadata.ModuleDependencies"-->
+        <!--            android:enabled="false"-->
+        <!--            android:exported="false"-->
+        <!--            tools:ignore="MissingClass">-->
+        <!--            <intent-filter>-->
+        <!--                <action android:name="com.google.android.gms.metadata.MODULE_DEPENDENCIES" />-->
+        <!--            </intent-filter>-->
+        <!--            <meta-data android:name="photopicker_activity:0:required" android:value="" />-->
+        <!--        </service>-->
     </application>
 
 </manifest>

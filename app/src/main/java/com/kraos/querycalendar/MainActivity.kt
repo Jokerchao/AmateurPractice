@@ -29,6 +29,7 @@ import com.kraos.querycalendar.activity.SwipeStackCardActivity
 import com.kraos.querycalendar.activity.SwipeStrangerCardActivity
 import com.kraos.querycalendar.activity.TagLayoutActivity
 import com.kraos.querycalendar.activity.TestAnimateActivity
+import com.kraos.querycalendar.activity.TestCalenderHistoryActivity
 import com.kraos.querycalendar.activity.TestCustomViewActivity
 import com.kraos.querycalendar.activity.TestDragViewActivity
 import com.kraos.querycalendar.activity.TestKeyBoardActivity
@@ -71,6 +72,7 @@ class MainActivity : AppCompatActivity() {
             add("ZoomPager练习")
             add("倒计时动画练习")
             add("图片选择器练习")
+            add("仿QQ聊天记录日历练习")
         }
     }
 
@@ -145,6 +147,7 @@ class MainActivity : AppCompatActivity() {
                     25 -> ZoomPagerActivity().bootActivity(this@MainActivity)
                     26 -> CountdownTimerTestActivity().bootActivity(this@MainActivity)
                     27 -> TestPhotoPickerActivity().bootActivity(this@MainActivity)
+                    28 -> TestCalenderHistoryActivity().bootActivity(this@MainActivity)
                 }
             }
         }
