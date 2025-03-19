@@ -5,8 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.DashBoardActivity">
-    <com.kraos.querycalendar.view.DashboardView
+    <com.kraos.querycalendar.view.DashboardProView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent">
+    </com.kraos.querycalendar.view.DashboardProView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
