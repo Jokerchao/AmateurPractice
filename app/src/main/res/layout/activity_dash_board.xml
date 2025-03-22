@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.DashBoardActivity">
-    <com.kraos.querycalendar.view.DashboardProView
+
+    <com.kraos.querycalendar.view.TransModeView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </com.kraos.querycalendar.view.DashboardProView>
+        android:layout_height="match_parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

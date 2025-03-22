@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.kraos.querycalendar.activity.CameraViewActivity
 import com.kraos.querycalendar.activity.ComposeTestActivity
 import com.kraos.querycalendar.activity.CoroutinesTestActivity
+import com.kraos.querycalendar.activity.CountdownTimerTestActivity
 import com.kraos.querycalendar.activity.DashBoardActivity
 import com.kraos.querycalendar.activity.DatePickerTestActivity
 import com.kraos.querycalendar.activity.DragViewTestActivity
@@ -28,9 +29,11 @@ import com.kraos.querycalendar.activity.SwipeStackCardActivity
 import com.kraos.querycalendar.activity.SwipeStrangerCardActivity
 import com.kraos.querycalendar.activity.TagLayoutActivity
 import com.kraos.querycalendar.activity.TestAnimateActivity
+import com.kraos.querycalendar.activity.TestCalenderHistoryActivity
 import com.kraos.querycalendar.activity.TestCustomViewActivity
 import com.kraos.querycalendar.activity.TestDragViewActivity
 import com.kraos.querycalendar.activity.TestKeyBoardActivity
+import com.kraos.querycalendar.activity.TestPhotoPickerActivity
 import com.kraos.querycalendar.activity.TestPopupActivity
 import com.kraos.querycalendar.activity.TestProxyActivity
 import com.kraos.querycalendar.activity.TestSelectActivity
@@ -67,6 +70,9 @@ class MainActivity : AppCompatActivity() {
             add("软键盘弹出练习")
             add("Popup练习")
             add("ZoomPager练习")
+            add("倒计时动画练习")
+            add("图片选择器练习")
+            add("仿QQ聊天记录日历练习")
         }
     }
 
@@ -139,6 +145,9 @@ class MainActivity : AppCompatActivity() {
                     23 -> TestKeyBoardActivity().bootActivity(this@MainActivity)
                     24 -> TestPopupActivity().bootActivity(this@MainActivity)
                     25 -> ZoomPagerActivity().bootActivity(this@MainActivity)
+                    26 -> CountdownTimerTestActivity().bootActivity(this@MainActivity)
+                    27 -> TestPhotoPickerActivity().bootActivity(this@MainActivity)
+                    28 -> TestCalenderHistoryActivity().bootActivity(this@MainActivity)
                 }
             }
         }
