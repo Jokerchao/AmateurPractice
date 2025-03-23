@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     tools:context=".activity.DashBoardActivity">
 
-    <com.kraos.querycalendar.view.MultilineTextView
+    <com.kraos.querycalendar.view.CameraProView
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
