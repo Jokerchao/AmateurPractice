@@ -8,14 +8,28 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+<!--                <com.kraos.querycalendar.view.MaterialEditText-->
+<!--                    android:id="@+id/met_test"-->
+<!--                    android:hint="提示词"-->
+<!--                    app:enable="false"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content" />-->
 
-        <com.kraos.querycalendar.view.MaterialEditText
-            android:id="@+id/met_test"
-            android:hint="提示词"
-            app:enable="false"
+        <EditText
+            android:id="@+id/et_sample"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:hint="提示词"
+            app:enable="false" />
+
+        <com.kraos.querycalendar.view.MaterialProEditText
+            android:id="@+id/met_pro_test"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="提示词"
+            app:enable_label="true"/>
 
     </LinearLayout>
 
