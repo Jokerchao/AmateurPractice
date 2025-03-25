@@ -9,11 +9,10 @@ import android.graphics.Paint
 import android.graphics.Paint.ANTI_ALIAS_FLAG
 import android.util.AttributeSet
 import android.view.View
+import androidx.core.graphics.withSave
+import androidx.core.graphics.withTranslation
 import com.kraos.querycalendar.R
 import com.kraos.querycalendar.util.px
-import java.util.jar.Attributes
-import androidx.core.graphics.withTranslation
-import androidx.core.graphics.withClip
 
 /**
  * kotlin实现的camera view
@@ -30,25 +29,46 @@ class CameraProView @JvmOverloads constructor(
 
     private val paint = Paint(ANTI_ALIAS_FLAG)
     private val camera = Camera().apply {
-        rotateX(30f)
-        setLocation(0f, 0f, -8f * resources.displayMetrics.density)
+        setLocation(0f, 0f, -6f * resources.displayMetrics.density)
     }
+
+    private var topFlip = 0f
+        set(value) {
+            field = value
+            invalidate()
+        }
+
+    private var bottomFlip = 0f
+        set(value) {
+            field = value
+            invalidate()
+        }
+
+    private var rotateAngle = 0f
+        set(value) {
+            field = value
+            invalidate()
+        }
 
     override fun onDraw(canvas: Canvas) {
         //裁掉下半部分
-        canvas.withTranslation(
-            (IMAGE_PADDING + IMAGE_WIDTH / 2f),
-            (IMAGE_PADDING + IMAGE_WIDTH / 2f)
-        ) {
-            rotate(-10f)
+        canvas.withSave {
+            translate(
+                (IMAGE_PADDING + IMAGE_WIDTH / 2f),
+                (IMAGE_PADDING + IMAGE_WIDTH / 2f)
+            )
+            rotate(-rotateAngle)
+            camera.save()
+            camera.rotateX(bottomFlip)
             camera.applyToCanvas(this)
+            camera.restore()
             clipRect(
                 -IMAGE_WIDTH,
                 0f,
                 IMAGE_WIDTH,
                 IMAGE_WIDTH
             )
-            rotate(10f)
+            rotate(rotateAngle)
             translate(-(IMAGE_PADDING + IMAGE_WIDTH / 2f), -(IMAGE_PADDING + IMAGE_WIDTH / 2f))
             drawBitmap(getAvatar(IMAGE_WIDTH.toInt()), IMAGE_PADDING, IMAGE_PADDING, paint)
         }
@@ -59,14 +79,18 @@ class CameraProView @JvmOverloads constructor(
             (IMAGE_PADDING + IMAGE_WIDTH / 2f),
             (IMAGE_PADDING + IMAGE_WIDTH / 2f)
         ) {
-            rotate(-10f)
+            rotate(-rotateAngle)
+            camera.save()
+            camera.rotateX(topFlip)
+            camera.applyToCanvas(this)
+            camera.restore()
             clipRect(
                 -IMAGE_WIDTH,
                 -IMAGE_WIDTH,
                 IMAGE_WIDTH,
                 0f
             )
-            rotate(10f)
+            rotate(rotateAngle)
             translate(
                 -(IMAGE_PADDING + IMAGE_WIDTH / 2f),
                 -(IMAGE_PADDING + IMAGE_WIDTH / 2f)
