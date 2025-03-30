@@ -21,14 +21,34 @@ class CircleProView @JvmOverloads constructor(
     private val paint = Paint(ANTI_ALIAS_FLAG).apply {
         color = "#FF0000".toColorInt()
     }
-    private var radius = 100f.px
+
+    private val topPadding = 100f.px
+    private val startPadding = 100f.px
+
+    var radius = 100f.px
         set(value) {
             field = value
             invalidate()
         }
 
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+        val width = startPadding + 2 * radius
+        val height = topPadding + 2 * radius
+        val resolveWidth = resolveSize(width.toInt(), widthMeasureSpec)
+        val resolveHeight = resolveSize(height.toInt(), heightMeasureSpec)
+        setMeasuredDimension(resolveWidth, resolveHeight)
+    }
+
     override fun onDraw(canvas: Canvas) {
-        canvas.drawCircle(width / 2f, height / 2f, radius, paint)
+//        canvas.drawCircle(width / 2f, height / 2f, radius, paint)
+        canvas.drawOval(
+            startPadding,
+            topPadding,
+            startPadding + 2 * radius,
+            topPadding + 2 * radius,
+            paint
+        )
     }
 
 }

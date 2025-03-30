@@ -14,6 +14,7 @@ import com.kraos.querycalendar.activity.CameraViewActivity
 import com.kraos.querycalendar.activity.ComposeTestActivity
 import com.kraos.querycalendar.activity.CoroutinesTestActivity
 import com.kraos.querycalendar.activity.CountdownTimerTestActivity
+import com.kraos.querycalendar.activity.CustomLayoutActivity
 import com.kraos.querycalendar.activity.DashBoardActivity
 import com.kraos.querycalendar.activity.DatePickerTestActivity
 import com.kraos.querycalendar.activity.DragViewTestActivity
@@ -73,13 +74,14 @@ class MainActivity : AppCompatActivity() {
             add("倒计时动画练习")
             add("图片选择器练习")
             add("仿QQ聊天记录日历练习")
+            add("自定义布局练习")
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val notificationManagerCompat = NotificationManagerCompat.from(this)
+        NotificationManagerCompat.from(this)
         Log.d(
             TAG, "onCreate: " + NotificationManagerCompat.from(
                 applicationContext
@@ -98,10 +100,9 @@ class MainActivity : AppCompatActivity() {
     internal inner class RvAdapter(list: List<String?>) :
         RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         //数据源
-        private val mList: ArrayList<*>?
+        private val mList: ArrayList<*>? = list as ArrayList<*>
 
         init {
-            mList = list as ArrayList<*>
             val string = list[0]
         }
 
@@ -148,6 +149,7 @@ class MainActivity : AppCompatActivity() {
                     26 -> CountdownTimerTestActivity().bootActivity(this@MainActivity)
                     27 -> TestPhotoPickerActivity().bootActivity(this@MainActivity)
                     28 -> TestCalenderHistoryActivity().bootActivity(this@MainActivity)
+                    29 -> CustomLayoutActivity().bootActivity(this@MainActivity)
                 }
             }
         }
@@ -158,11 +160,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     internal inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var tv: TextView
-
-        init {
-            tv = itemView.findViewById(R.id.item_text)
-        }
+        var tv: TextView = itemView.findViewById(R.id.item_text)
     }
 
     companion object {
