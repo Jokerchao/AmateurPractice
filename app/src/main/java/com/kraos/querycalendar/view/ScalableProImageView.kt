@@ -32,24 +32,18 @@ class ScalableProImageView @JvmOverloads constructor(
     private val imageHeight = bitmap.height
     private var originOffsetX = 0f
     private var originOffsetY = 0f
+    private var offsetX = 0f
+    private var offsetY = 0f
     private val paint = Paint(ANTI_ALIAS_FLAG)
     var scaleFraction = 1f
 
     //放大系数
-    private var smallScale = 0f
-    private var bigScale = 0f
+    var smallScale = 0f
+    var bigScale = 0f
     var currentScale = 0f
         set(value) {
-            if (field == value) {
-                return
-            }
             field = value
             invalidate()
-//            if (value == bigScale) {
-//                scaleAnimator.start()
-//            } else {
-//                scaleAnimator.reverse()
-//            }
         }
 
     //手势监听器
@@ -58,7 +52,11 @@ class ScalableProImageView @JvmOverloads constructor(
     }
 
     //动画变化器
-    private val scaleAnimator = ObjectAnimator.ofFloat(this, "scaleFraction", smallScale, bigScale)
+    private val scaleAnimator by lazy {
+        ObjectAnimator.ofFloat(this, "currentScale", 0f).apply {
+            setFloatValues(smallScale, bigScale)
+        }
+    }
 
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
@@ -80,8 +78,7 @@ class ScalableProImageView @JvmOverloads constructor(
 
     override fun onDraw(canvas: Canvas) {
         //centerCrop的方式展示
-//        canvas.translate(originOffsetX, originOffsetY)
-        currentScale + (1 - scaleFraction) * currentScale
+
         canvas.scale(
             currentScale,
             currentScale,
@@ -89,7 +86,7 @@ class ScalableProImageView @JvmOverloads constructor(
             height / 2f
         )
         canvas.drawBitmap(
-            Util.getAvatar(resources, imageWidth.toInt()),
+            bitmap,
             originOffsetX,
             originOffsetY,
             paint
@@ -142,6 +139,11 @@ class ScalableProImageView @JvmOverloads constructor(
             bigScale
         } else {
             smallScale
+        }
+        if (currentScale == bigScale) {
+            scaleAnimator.start()
+        } else {
+            scaleAnimator.reverse()
         }
         return false
     }
