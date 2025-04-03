@@ -49,17 +49,17 @@ class TagLayoutActivity : BaseActivity() {
 //        animationSet.start()
 
         //4.省份文字变化动画
-        val objectAnimator =
-            ObjectAnimator.ofObject(
-                binding.provinceView,
-                "showText",
-                ProvinceEvaluator(),
-                "北京市",
-                "澳门特别行政区"
-            )
-        objectAnimator.duration = 10000
-        objectAnimator.startDelay = 1000
-        objectAnimator.start()
+//        val objectAnimator =
+//            ObjectAnimator.ofObject(
+//                binding.provinceView,
+//                "showText",
+//                ProvinceEvaluator(),
+//                "北京市",
+//                "澳门特别行政区"
+//            )
+//        objectAnimator.duration = 10000
+//        objectAnimator.startDelay = 1000
+//        objectAnimator.start()
 
 
     }
