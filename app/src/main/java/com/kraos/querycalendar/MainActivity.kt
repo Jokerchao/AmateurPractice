@@ -22,6 +22,7 @@ import com.kraos.querycalendar.activity.IllegalStateTestActivity
 import com.kraos.querycalendar.activity.ImageTextActivity
 import com.kraos.querycalendar.activity.KotlinTestActivity
 import com.kraos.querycalendar.activity.MaterialEditTextActivity
+import com.kraos.querycalendar.activity.MultiTouchViewActivity
 import com.kraos.querycalendar.activity.PieChartActivity
 import com.kraos.querycalendar.activity.RichEditorTestActivity
 import com.kraos.querycalendar.activity.ScalableImageViewActivity
@@ -75,6 +76,7 @@ class MainActivity : AppCompatActivity() {
             add("图片选择器练习")
             add("仿QQ聊天记录日历练习")
             add("自定义布局练习")
+            add("多点触控的拖拽View")
         }
     }
 
@@ -150,6 +152,7 @@ class MainActivity : AppCompatActivity() {
                     27 -> TestPhotoPickerActivity().bootActivity(this@MainActivity)
                     28 -> TestCalenderHistoryActivity().bootActivity(this@MainActivity)
                     29 -> CustomLayoutActivity().bootActivity(this@MainActivity)
+                    30 -> MultiTouchViewActivity().bootActivity(this@MainActivity)
                 }
             }
         }
