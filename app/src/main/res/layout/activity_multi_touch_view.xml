@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".activity.MultiTouchViewActivity">
 
-    <com.kraos.querycalendar.view.MultiTouchView2
+    <com.kraos.querycalendar.view.MultiTouchView3
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

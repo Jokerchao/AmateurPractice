@@ -42,7 +42,6 @@ class MultiTouchView2 @JvmOverloads constructor(
     private var originalOffsetY = 0f
 
     //当前目标移动的pointerId
-//    private var triggerPointerId = 0
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
