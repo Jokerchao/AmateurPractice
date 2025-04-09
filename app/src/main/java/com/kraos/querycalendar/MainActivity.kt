@@ -17,6 +17,7 @@ import com.kraos.querycalendar.activity.CountdownTimerTestActivity
 import com.kraos.querycalendar.activity.CustomLayoutActivity
 import com.kraos.querycalendar.activity.DashBoardActivity
 import com.kraos.querycalendar.activity.DatePickerTestActivity
+import com.kraos.querycalendar.activity.DragToCollectActivity
 import com.kraos.querycalendar.activity.DragViewTestActivity
 import com.kraos.querycalendar.activity.IllegalStateTestActivity
 import com.kraos.querycalendar.activity.ImageTextActivity
@@ -79,6 +80,7 @@ class MainActivity : AppCompatActivity() {
             add("自定义布局练习")
             add("多点触控的拖拽View")
             add("简单的ViewPager自定义")
+            add("自定义拖拽练习")
         }
     }
 
@@ -156,6 +158,7 @@ class MainActivity : AppCompatActivity() {
                     29 -> CustomLayoutActivity().bootActivity(this@MainActivity)
                     30 -> MultiTouchViewActivity().bootActivity(this@MainActivity)
                     31 -> TwoPagerActivity().bootActivity(this@MainActivity)
+                    32 -> DragToCollectActivity().bootActivity(this@MainActivity)
                 }
             }
         }
