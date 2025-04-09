@@ -40,6 +40,7 @@ import com.kraos.querycalendar.activity.TestPopupActivity
 import com.kraos.querycalendar.activity.TestProxyActivity
 import com.kraos.querycalendar.activity.TestSelectActivity
 import com.kraos.querycalendar.activity.TestTextColorFormatActivity
+import com.kraos.querycalendar.activity.TwoPagerActivity
 import com.kraos.querycalendar.activity.ZoomPagerActivity
 
 class MainActivity : AppCompatActivity() {
@@ -77,6 +78,7 @@ class MainActivity : AppCompatActivity() {
             add("仿QQ聊天记录日历练习")
             add("自定义布局练习")
             add("多点触控的拖拽View")
+            add("简单的ViewPager自定义")
         }
     }
 
@@ -153,6 +155,7 @@ class MainActivity : AppCompatActivity() {
                     28 -> TestCalenderHistoryActivity().bootActivity(this@MainActivity)
                     29 -> CustomLayoutActivity().bootActivity(this@MainActivity)
                     30 -> MultiTouchViewActivity().bootActivity(this@MainActivity)
+                    31 -> TwoPagerActivity().bootActivity(this@MainActivity)
                 }
             }
         }
