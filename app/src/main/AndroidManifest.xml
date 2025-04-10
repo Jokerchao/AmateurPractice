@@ -17,6 +17,9 @@
         android:theme="@style/Theme.AppCompat"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".activity.TransConstraintLayoutActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.DragToCollectActivity"
             android:exported="false" />
         <activity

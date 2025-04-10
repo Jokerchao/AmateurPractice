@@ -41,6 +41,7 @@ import com.kraos.querycalendar.activity.TestPopupActivity
 import com.kraos.querycalendar.activity.TestProxyActivity
 import com.kraos.querycalendar.activity.TestSelectActivity
 import com.kraos.querycalendar.activity.TestTextColorFormatActivity
+import com.kraos.querycalendar.activity.TransConstraintLayoutActivity
 import com.kraos.querycalendar.activity.TwoPagerActivity
 import com.kraos.querycalendar.activity.ZoomPagerActivity
 
@@ -81,6 +82,7 @@ class MainActivity : AppCompatActivity() {
             add("多点触控的拖拽View")
             add("简单的ViewPager自定义")
             add("自定义拖拽练习")
+            add("复杂的ConstraintLayout练习")
         }
     }
 
@@ -159,6 +161,7 @@ class MainActivity : AppCompatActivity() {
                     30 -> MultiTouchViewActivity().bootActivity(this@MainActivity)
                     31 -> TwoPagerActivity().bootActivity(this@MainActivity)
                     32 -> DragToCollectActivity().bootActivity(this@MainActivity)
+                    33 -> TransConstraintLayoutActivity().bootActivity(this@MainActivity)
                 }
             }
         }

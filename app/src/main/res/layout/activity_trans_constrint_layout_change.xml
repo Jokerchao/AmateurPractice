@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".activity.TransConstraintLayoutActivity">
+
+        <ImageView
+            android:id="@+id/iv_logo_1"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="36dp"
+            android:background="@drawable/ic_code_craft"
+            android:contentDescription="image_logo_1"
+            app:layout_constraintEnd_toStartOf="@id/iv_logo_2"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_logo_2"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/ic_code_craft"
+            android:contentDescription="image_logo_2"
+            app:layout_constraintEnd_toStartOf="@+id/iv_logo_3"
+            app:layout_constraintStart_toEndOf="@+id/iv_logo_1"
+            app:layout_constraintTop_toTopOf="@+id/iv_logo_1" />
+
+        <ImageView
+            android:id="@+id/iv_logo_3"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/ic_code_craft"
+            android:contentDescription="image_logo_3"
+            app:layout_constraintEnd_toStartOf="@id/iv_logo_4"
+            app:layout_constraintStart_toEndOf="@+id/iv_logo_2"
+            app:layout_constraintTop_toTopOf="@+id/iv_logo_1" />
+
+        <ImageView
+            android:id="@+id/iv_logo_4"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/ic_code_craft"
+            android:contentDescription="image_logo_4"
+            app:layout_constraintEnd_toStartOf="@id/iv_logo_5"
+            app:layout_constraintStart_toEndOf="@+id/iv_logo_3"
+            app:layout_constraintTop_toTopOf="@+id/iv_logo_1" />
+
+        <ImageView
+            android:id="@+id/iv_logo_5"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/ic_code_craft"
+            android:contentDescription="image_logo_5"
+            app:layout_constraintEnd_toStartOf="@+id/iv_logo_6"
+            app:layout_constraintStart_toEndOf="@+id/iv_logo_4"
+            app:layout_constraintTop_toTopOf="@+id/iv_logo_1" />
+
+
+        <ImageView
+            android:id="@+id/iv_logo_6"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/ic_code_craft"
+            android:contentDescription="image_logo_6"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iv_logo_5"
+            app:layout_constraintTop_toTopOf="@+id/iv_logo_1" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
