@@ -1,5 +1,6 @@
 package com.kraos.querycalendar.compose_widget
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -7,7 +8,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -19,7 +19,9 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -37,67 +39,65 @@ import androidx.compose.ui.unit.sp
  */
 object ExpandableColumnGrid {
 
+    @Stable
+    class ExpandableColumnGridState {
+        //选中的item
+        var expandedIndex by mutableStateOf(-1)
+
+        val contentList = mutableStateListOf<String>()
+    }
+
     private const val COLUMNS = 3 // 列数
 
 
     @Composable
-    fun ExpandableThreeColumnGrid() {
-//        val gifts = listOf("樱恋玉泉", "梦幻岛屿")
-        val gifts = listOf(
-            "樱恋玉泉",
-            "梦幻岛屿",
-            "摩天轮",
-            "月光守护",
-            "魔法卡片",
-            "星空之旅",
-            "海洋之心",
-            "梦幻花园",
-            "时光之钥",
-            "流星雨",
-            "魔法森林",
-            "梦幻城堡",
-            "星际探险"
-        )
-        var expandedIndex by remember { mutableStateOf(-1) }
-        val gridRowCount = (gifts.size + COLUMNS - 1) / COLUMNS
+    fun ExpandableColumnGrid(
+        modifier: Modifier = Modifier,
+        state: ExpandableColumnGridState = remember { ExpandableColumnGridState() },
+        contentPadding: PaddingValues = PaddingValues(0.dp),
+        verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(8.dp),
+        horizontalArrangement: Arrangement.Horizontal = Arrangement.spacedBy(8.dp),
+        columnCount: Int = COLUMNS,
+        itemContent: @Composable (Int) -> Unit = {},
+        itemExpandContent: @Composable (Int) -> Unit = {}
+    ) {
+        val gridRowCount = remember {
+            (state.contentList.size + columnCount - 1) / columnCount
+        }
+        if (state.contentList.isNotEmpty()) {
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(columnCount),
+                modifier = modifier,
+                contentPadding = contentPadding,
+                verticalArrangement = verticalArrangement,
+                horizontalArrangement = horizontalArrangement
+            ) {
+                for (row in 0 until gridRowCount) {
+                    val startIndex = row * columnCount
+                    val endIndex = minOf(startIndex + columnCount, state.contentList.size)
 
-
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(COLUMNS),
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(12.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            for (row in 0 until gridRowCount) {
-                val startIndex = row * COLUMNS
-                val endIndex = minOf(startIndex + COLUMNS, gifts.size)
-
-                // 插入当前行的元素
-                for (i in startIndex until endIndex) {
-                    item {
-                        GiftItem(
-                            name = gifts[i],
-                            isSelected = (expandedIndex == i),
-                            onClick = {
-                                expandedIndex = if (expandedIndex == i) -1 else i
-                            }
-                        )
+                    // 插入当前行的元素
+                    for (i in startIndex until endIndex) {
+                        item {
+                            itemContent.invoke(i)
+                        }
                     }
-                }
-
-                // 如果当前行包含展开项，插入详情
-                if (expandedIndex in startIndex until endIndex) {
-                    item(span = { GridItemSpan(COLUMNS) }) {
-                        GiftDetailCard(giftName = gifts[expandedIndex])
+                    item(span = { GridItemSpan(columnCount) }) {
+                        AnimatedVisibility(
+                            visible = state.expandedIndex in startIndex until endIndex,
+                        ) {
+                            itemExpandContent.invoke(state.expandedIndex)
+                        }
                     }
                 }
             }
         }
+
+
     }
 
     @Composable
-    fun GiftItem(name: String, isSelected: Boolean, onClick: () -> Unit) {
+    fun TestGiftItem(name: String, isSelected: Boolean, onClick: () -> Unit) {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -114,7 +114,7 @@ object ExpandableColumnGrid {
     }
 
     @Composable
-    fun GiftDetailCard(giftName: String) {
+    fun TestGiftDetailCard(giftName: String) {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -135,5 +135,44 @@ object ExpandableColumnGrid {
 @Composable
 @Preview
 fun PreviewExpandableThreeColumnGrid() {
-    ExpandableColumnGrid.ExpandableThreeColumnGrid()
+    val state = remember {
+        ExpandableColumnGrid.ExpandableColumnGridState().apply {
+            contentList.addAll(
+                listOf(
+                    "樱恋玉泉",
+                    "梦幻岛屿",
+                    "摩天轮",
+                    "月光守护",
+                    "魔法卡片",
+                    "星空之旅",
+                    "海洋之心",
+                    "梦幻花园",
+                    "时光之钥",
+                    "流星雨",
+                    "魔法森林",
+                    "梦幻城堡",
+                    "星际探险",
+                    "梦幻乐园"
+                )
+            )
+        }
+    }
+    ExpandableColumnGrid.ExpandableColumnGrid(
+        state = state,
+        itemContent = { index ->
+            ExpandableColumnGrid.TestGiftItem(
+                name = "${index + 1} ${state.contentList[index]}",
+                isSelected = (state.expandedIndex == index),
+                onClick = {
+                    state.expandedIndex =
+                        if (state.expandedIndex == index) -1 else index
+                }
+            )
+        },
+        itemExpandContent = { index ->
+            ExpandableColumnGrid.TestGiftDetailCard(
+                giftName = state.contentList[index]
+            )
+        }
+    )
 }
