@@ -20,6 +20,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -76,19 +77,26 @@ object ExpandableColumnGrid {
                     val startIndex = row * columnCount
                     val endIndex = minOf(startIndex + columnCount, state.contentList.size)
 
+                    val isInCurrentRow by derivedStateOf {
+                        state.expandedIndex in startIndex until endIndex
+                    }
+                    val isIndexValid by derivedStateOf {
+                        state.expandedIndex >= 0 && state.expandedIndex < state.contentList.size
+                    }
+
                     // 插入当前行的元素
                     for (i in startIndex until endIndex) {
                         item {
                             itemContent.invoke(i)
                         }
                     }
+
                     item(span = { GridItemSpan(columnCount) }) {
-                        AnimatedVisibility(
-                            visible = state.expandedIndex in startIndex until endIndex,
-                        ) {
-                            itemExpandContent.invoke(state.expandedIndex)
+                        AnimatedVisibility(visible = isInCurrentRow && isIndexValid) {
+                            itemExpandContent(state.expandedIndex)
                         }
                     }
+
                 }
             }
         }
@@ -170,9 +178,11 @@ fun PreviewExpandableThreeColumnGrid() {
             )
         },
         itemExpandContent = { index ->
-            ExpandableColumnGrid.TestGiftDetailCard(
-                giftName = state.contentList[index]
-            )
+            if (index >= 0 && index < state.contentList.size) {
+                ExpandableColumnGrid.TestGiftDetailCard(
+                    giftName = state.contentList[index]
+                )
+            }
         }
     )
 }
